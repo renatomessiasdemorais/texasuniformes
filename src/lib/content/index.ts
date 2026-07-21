@@ -1,4 +1,4 @@
-import { cacheLife } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import { isSanityConfigured, sanityClient } from "@/lib/sanity/client";
 import {
   allSegmentsQuery,
@@ -29,9 +29,13 @@ export {
   fallbackProcessSteps,
 } from "./fallback-data";
 
+/** Shared cache tag for all Sanity-backed content — invalidated on-demand by the /api/revalidate webhook. */
+export const SANITY_CONTENT_TAG = "sanity-content";
+
 export async function getSiteSettings(): Promise<SiteSettings> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("max");
+  cacheTag(SANITY_CONTENT_TAG);
 
   if (isSanityConfigured && sanityClient) {
     const data = await sanityClient.fetch<SiteSettings | null>(
@@ -44,7 +48,8 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 
 export async function getAllSegments(): Promise<Segment[]> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("max");
+  cacheTag(SANITY_CONTENT_TAG);
 
   if (isSanityConfigured && sanityClient) {
     const data = await sanityClient.fetch<Segment[]>(allSegmentsQuery);
@@ -55,7 +60,8 @@ export async function getAllSegments(): Promise<Segment[]> {
 
 export async function getSegment(slug: SegmentSlug): Promise<Segment | null> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("max");
+  cacheTag(SANITY_CONTENT_TAG);
 
   if (isSanityConfigured && sanityClient) {
     const data = await sanityClient.fetch<Segment | null>(
@@ -69,7 +75,8 @@ export async function getSegment(slug: SegmentSlug): Promise<Segment | null> {
 
 export async function getTestimonials(): Promise<Testimonial[]> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("max");
+  cacheTag(SANITY_CONTENT_TAG);
 
   if (isSanityConfigured && sanityClient) {
     const data = await sanityClient.fetch<Testimonial[]>(testimonialsQuery);
@@ -80,7 +87,8 @@ export async function getTestimonials(): Promise<Testimonial[]> {
 
 export async function getClientLogos(): Promise<ClientLogo[]> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("max");
+  cacheTag(SANITY_CONTENT_TAG);
 
   if (isSanityConfigured && sanityClient) {
     const data = await sanityClient.fetch<ClientLogo[]>(clientLogosQuery);
@@ -91,7 +99,8 @@ export async function getClientLogos(): Promise<ClientLogo[]> {
 
 export async function getGeneralFaq(): Promise<FaqItem[]> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("max");
+  cacheTag(SANITY_CONTENT_TAG);
 
   if (isSanityConfigured && sanityClient) {
     const data = await sanityClient.fetch<FaqItem[]>(generalFaqQuery);

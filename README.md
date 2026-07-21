@@ -26,6 +26,19 @@ Enquanto as variáveis abaixo não forem definidas, o site usa o conteúdo place
 
 Assim que o Sanity estiver configurado, qualquer conteúdo publicado no Studio passa a substituir automaticamente o placeholder correspondente (o fallback só é usado para o que ainda não foi preenchido).
 
+### Atualização instantânea (webhook)
+
+Por padrão, o conteúdo do Sanity fica em cache por um tempo (para o site carregar rápido) e só é revalidado sozinho de tempos em tempos. Para o site atualizar em segundos sempre que algo for publicado no Studio:
+
+1. Gere um valor aleatório qualquer para `SANITY_REVALIDATE_SECRET` no `.env.local` (e na Vercel, em produção) — pode ser qualquer string longa
+2. Em [manage.sanity.io](https://www.sanity.io/manage) → seu projeto → **API → Webhooks → Create webhook**:
+   - **URL**: `https://SEU-DOMINIO/api/revalidate` (em produção) — para testar localmente, algo como `ngrok` seria necessário, então normalmente só configure o webhook para o domínio de produção
+   - **Dataset**: `production`
+   - **Trigger on**: Create, Update, Delete
+   - **HTTP method**: POST
+   - **Secret**: o mesmo valor de `SANITY_REVALIDATE_SECRET`
+3. Salve — a partir daí, publicar algo no Studio atualiza o site em produção em poucos segundos, sem precisar de novo deploy
+
 ## Envio de leads (formulário de orçamento)
 
 Sem `RESEND_API_KEY`, o formulário funciona normalmente e o lead é logado no servidor, mas nenhum e-mail é enviado. Para ativar o envio:

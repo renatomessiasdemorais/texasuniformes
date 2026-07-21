@@ -18,6 +18,15 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PLACEHOLDERS_DIR = path.join(__dirname, "..", "public", "placeholders");
 
+// Plain `node` doesn't auto-load .env.local the way `next dev` does — load it ourselves.
+for (const file of [".env.local", ".env"]) {
+  try {
+    process.loadEnvFile(path.join(__dirname, "..", file));
+  } catch {
+    // file doesn't exist — fine, env vars may already be set another way
+  }
+}
+
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 const token = process.env.SANITY_API_WRITE_TOKEN;

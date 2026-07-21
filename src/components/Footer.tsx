@@ -1,13 +1,14 @@
 import Link from "next/link";
-import { cacheLife } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import { AtSign, Briefcase, Globe, Mail, MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { getSiteSettings } from "@/lib/content";
+import { getSiteSettings, SANITY_CONTENT_TAG } from "@/lib/content";
 import { mainNavLinks, segmentNavLinks } from "@/lib/nav-links";
 
 export async function Footer() {
   "use cache";
-  cacheLife("hours");
+  cacheLife("max");
+  cacheTag(SANITY_CONTENT_TAG);
 
   const settings = await getSiteSettings();
   const year = new Date().getFullYear();
