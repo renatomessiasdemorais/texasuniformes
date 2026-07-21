@@ -4,7 +4,9 @@ import { structureTool } from "sanity/structure";
 import { schemaTypes } from "./studio/schemaTypes";
 import { structure } from "./studio/structure";
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "";
+// Placeholder keeps the Studio route buildable before a real Sanity project
+// exists — set NEXT_PUBLIC_SANITY_PROJECT_ID to make /studio actually work.
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "placeholder";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 
 export default defineConfig({
