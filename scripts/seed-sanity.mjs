@@ -168,7 +168,7 @@ const TESTIMONIALS = [
 ];
 
 async function seedSiteSettings() {
-  const heroImage = await uploadImage("hero-home.jpg", "Uniformes profissionais Texas Uniformes");
+  const heroImage = await uploadImage("hero-home-v2.jpg", "Uniformes profissionais Texas Uniformes");
   await client.createOrReplace({
     _id: "siteSettings",
     _type: "siteSettings",

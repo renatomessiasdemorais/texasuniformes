@@ -33,7 +33,7 @@ export const fallbackSiteSettings: SiteSettings = {
     heroSubheadline:
       "Fabricação própria desde 1995 em Ananindeua/PA — bordado e estamparia personalizados para empresas, hospitais, escolas e hotelaria.",
     heroImage: img(
-      "/placeholders/hero-home.jpg",
+      "/placeholders/hero-home-v2.jpg",
       "Uniformes profissionais Texas Uniformes",
       2400,
       1350
