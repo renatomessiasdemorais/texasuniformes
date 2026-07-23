@@ -39,18 +39,14 @@ Por padrão, o conteúdo do Sanity fica em cache por um tempo (para o site carre
    - **Secret**: o mesmo valor de `SANITY_REVALIDATE_SECRET`
 3. Salve — a partir daí, publicar algo no Studio atualiza o site em produção em poucos segundos, sem precisar de novo deploy
 
-## Envio de leads (formulário de orçamento)
+## Formulário de orçamento (QuoteForm)
 
-Sem `RESEND_API_KEY`, o formulário funciona normalmente e o lead é logado no servidor, mas nenhum e-mail é enviado. Para ativar o envio:
-
-1. Crie uma conta em [resend.com](https://resend.com) e gere uma API key
-2. Preencha `RESEND_API_KEY` no `.env.local` (e `LEAD_EMAIL_TO` / `LEAD_EMAIL_FROM` se quiser mudar os padrões)
+Não passa por nenhum servidor: ao enviar, o formulário monta uma mensagem do WhatsApp já formatada com todos os campos preenchidos (nome, empresa, telefone, segmento, quantidade, mensagem) e abre uma conversa com o número em `siteSettings.whatsapp` pronta para enviar. Se o navegador bloquear a abertura automática, a tela de sucesso mostra um botão "Abrir WhatsApp" com o mesmo link como alternativa.
 
 ## Estrutura
 
 - `src/app/(site)/` — páginas do site (Home, Empresa, Clientes, Contato, 4 páginas de segmento)
 - `src/app/studio/` — Sanity Studio embutido (layout próprio, sem header/footer do site)
-- `src/app/api/lead/` — recebe o formulário de orçamento e envia por e-mail via Resend
 - `src/components/` — componentes de UI e seções reutilizáveis
 - `src/lib/content/` — camada de dados: usa Sanity se configurado, senão cai no fallback local
 - `studio/schemaTypes/` — schemas do Sanity (segmento, depoimento, logo de cliente, FAQ, configurações do site)
@@ -59,4 +55,4 @@ Sem `RESEND_API_KEY`, o formulário funciona normalmente e o lead é logado no s
 
 ## Deploy
 
-Repositório conectado à Vercel — cada push em `main` gera um deploy automático. Configure as variáveis de ambiente acima no painel do projeto na Vercel (Settings → Environment Variables) para ativar CMS e envio de e-mail em produção.
+Repositório conectado à Vercel — cada push em `main` gera um deploy automático. Configure as variáveis de ambiente acima no painel do projeto na Vercel (Settings → Environment Variables) para ativar o CMS em produção.

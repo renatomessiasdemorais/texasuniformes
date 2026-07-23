@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { CheckCircle2 } from "lucide-react";
 import { type LeadInput, leadSchema, segmentOptions } from "@/lib/validation/lead";
-import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import { buildQuoteMessage, buildWhatsAppUrl } from "@/lib/whatsapp";
 import type { SegmentSlug } from "@/types/content";
 
 export function QuoteForm({
@@ -15,9 +15,7 @@ export function QuoteForm({
   defaultSegment?: SegmentSlug;
   whatsapp: string;
 }) {
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">(
-    "idle"
-  );
+  const [waHref, setWaHref] = useState<string | null>(null);
 
   const {
     register,
@@ -30,35 +28,27 @@ export function QuoteForm({
     },
   });
 
-  const onSubmit = async (data: LeadInput) => {
-    setStatus("sending");
-    try {
-      const res = await fetch("/api/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error("request failed");
-      setStatus("success");
-    } catch {
-      setStatus("error");
-    }
+  const onSubmit = (data: LeadInput) => {
+    const segmentLabel =
+      segmentOptions.find((s) => s.value === data.segment)?.label ??
+      data.segment;
+    const href = buildWhatsAppUrl(whatsapp, buildQuoteMessage(data, segmentLabel));
+
+    // Open synchronously (no awaits before this) so browsers don't treat it as a popup.
+    window.open(href, "_blank", "noopener,noreferrer");
+    setWaHref(href);
   };
 
-  if (status === "success") {
-    const waHref = buildWhatsAppUrl(
-      whatsapp,
-      "Olá! Acabei de enviar um pedido de orçamento pelo site."
-    );
+  if (waHref) {
     return (
       <div className="rounded-xl bg-light-bg p-8 text-center">
         <CheckCircle2 className="mx-auto text-teal" size={40} />
         <h3 className="mt-4 text-lg font-bold uppercase tracking-wide text-navy">
-          Pedido enviado com sucesso!
+          Quase lá!
         </h3>
         <p className="mt-2 text-sm text-text-dark/80">
-          Nossa equipe vai retornar em breve. Se preferir, fale com a gente
-          agora mesmo pelo WhatsApp.
+          Abrimos o WhatsApp com sua mensagem pronta — é só conferir e apertar
+          enviar. Se não abriu automaticamente, use o botão abaixo.
         </p>
         <a
           href={waHref}
@@ -66,7 +56,7 @@ export function QuoteForm({
           rel="noopener noreferrer"
           className="mt-5 inline-block rounded-full bg-teal px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white hover:opacity-90"
         >
-          Chamar no WhatsApp
+          Abrir WhatsApp
         </a>
       </div>
     );
@@ -156,19 +146,11 @@ export function QuoteForm({
         />
       </div>
 
-      {status === "error" && (
-        <p className="text-sm text-red-600">
-          Não foi possível enviar seu pedido agora. Tente novamente ou fale
-          pelo WhatsApp.
-        </p>
-      )}
-
       <button
         type="submit"
-        disabled={status === "sending"}
-        className="w-full rounded-full bg-teal px-6 py-3.5 text-sm font-semibold uppercase tracking-wide text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="w-full rounded-full bg-teal px-6 py-3.5 text-sm font-semibold uppercase tracking-wide text-white transition-opacity hover:opacity-90"
       >
-        {status === "sending" ? "Enviando..." : "Solicitar orçamento"}
+        Solicitar orçamento
       </button>
     </form>
   );
