@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { ClientLogosBar } from "@/components/ClientLogosBar";
 import { PageHeader } from "@/components/PageHeader";
-import { TestimonialGrid } from "@/components/TestimonialGrid";
-import { Container } from "@/components/ui/Container";
-import { getClientLogos, getTestimonials } from "@/lib/content";
+import { getClientLogos } from "@/lib/content";
+
+// Depoimentos temporariamente desativados no site (conteúdo ainda placeholder) —
+// ver componente TestimonialGrid e getTestimonials em @/lib/content.
 
 export const metadata: Metadata = {
   title: "Clientes",
@@ -12,10 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ClientesPage() {
-  const [testimonials, logos] = await Promise.all([
-    getTestimonials(),
-    getClientLogos(),
-  ]);
+  const logos = await getClientLogos();
 
   return (
     <>
@@ -23,12 +21,6 @@ export default async function ClientesPage() {
         title="Clientes"
         subtitle="Empresas, hospitais, escolas e hotéis que confiam na Texas Uniformes."
       />
-
-      <section className="bg-white py-16">
-        <Container>
-          <TestimonialGrid testimonials={testimonials} />
-        </Container>
-      </section>
 
       <ClientLogosBar logos={logos} />
     </>
