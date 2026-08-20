@@ -14,15 +14,16 @@ const img = (src: string, alt: string, width: number, height: number) => ({
 });
 
 export const fallbackSiteSettings: SiteSettings = {
-  phone: "(91) 0000-0000",
-  whatsapp: "5591000000000",
+  phone: "(91) 98116-1217",
+  whatsapp: "5591981161217",
   whatsappMessage:
-    "Olá! Gostaria de solicitar um orçamento de uniformes.",
+    "Olá! Preciso de orçamento para 30 peças ou mais. Empresa: ___ Produto: ___ Quantidade: ___ Cidade: ___",
   email: "contato@texasuniformes.com.br",
   address: {
-    line1: "Ananindeua, PA – Brasil",
-    line2: "Endereço completo a confirmar com o cliente",
-    mapUrl: "https://www.google.com/maps/search/?api=1&query=Ananindeua+PA",
+    line1: "Alameda Doze, 113 - Centro",
+    line2: "Ananindeua - PA, 67030-851",
+    mapUrl:
+      "https://www.google.com/maps/search/?api=1&query=Alameda+Doze+113+Ananindeua+PA",
   },
   social: {
     instagram: "https://instagram.com/texasuniformes",
@@ -132,7 +133,7 @@ const segmentDefs: Array<{
       {
         question: "Qual a quantidade mínima de peças por pedido?",
         answer:
-          "Trabalhamos sob encomenda para empresas — a quantidade mínima varia conforme o modelo. Fale com nosso time pelo WhatsApp para uma resposta específica ao seu caso.",
+          "Atendemos pedidos sob encomenda para empresas e instituições a partir de 30 peças.",
       },
       {
         question: "Qual o prazo de produção?",
@@ -326,7 +327,7 @@ export const fallbackGeneralFaq = [
     _id: "fallback-faq-geral-0",
     question: "A Texas Uniformes vende para pessoa física?",
     answer:
-      "Nosso foco é o atendimento sob encomenda para empresas, hospitais, escolas e hotelaria. Entre em contato para verificarmos a viabilidade do seu caso.",
+      "Nosso foco é o atendimento sob encomenda para empresas, hospitais, escolas e hotelaria, com pedidos a partir de 30 peças.",
     category: "geral" as const,
   },
   {

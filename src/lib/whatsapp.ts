@@ -7,7 +7,7 @@ export function buildWhatsAppUrl(whatsapp: string, message: string) {
 
 export function buildQuoteMessage(data: LeadInput, segmentLabel: string) {
   return [
-    "Olá! Gostaria de solicitar um orçamento de uniformes.",
+    "Olá! Gostaria de solicitar um orçamento de uniformes (pedido a partir de 30 peças).",
     "",
     `*Nome:* ${data.name}`,
     `*Empresa:* ${data.company}`,

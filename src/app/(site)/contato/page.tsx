@@ -21,7 +21,7 @@ export default async function ContatoPage() {
     <>
       <PageHeader
         title="Contato"
-        subtitle="Fale com a nossa equipe e solicite seu orçamento."
+        subtitle="Orçamentos para empresas e instituições, a partir de 30 peças."
       />
 
       <section className="bg-white py-16">

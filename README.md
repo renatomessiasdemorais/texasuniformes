@@ -13,7 +13,7 @@ Abra [http://localhost:3000](http://localhost:3000). O site funciona **sem nenhu
 
 ## Conectando o CMS (Sanity)
 
-Enquanto as variáveis abaixo não forem definidas, o site usa o conteúdo placeholder e o painel em `/studio` mostra uma tela pedindo configuração — isso é esperado.
+O projeto de produção usa o Sanity `7kwze5p4`, dataset `production`. As variáveis abaixo permitem substituir esses valores em ambientes de desenvolvimento ou preview.
 
 1. Copie `.env.local.example` para `.env.local`
 2. Crie um projeto gratuito em [sanity.io/manage](https://www.sanity.io/manage) (ou rode `npx sanity login` e `npx sanity init` a partir desta pasta)

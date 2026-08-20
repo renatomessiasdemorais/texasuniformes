@@ -4,7 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { CheckCircle2 } from "lucide-react";
-import { type LeadInput, leadSchema, segmentOptions } from "@/lib/validation/lead";
+import {
+  MINIMUM_ORDER_QUANTITY,
+  type LeadInput,
+  leadSchema,
+  segmentOptions,
+} from "@/lib/validation/lead";
 import { buildQuoteMessage, buildWhatsAppUrl } from "@/lib/whatsapp";
 import type { SegmentSlug } from "@/types/content";
 
@@ -123,11 +128,15 @@ export function QuoteForm({
 
       <div>
         <label className="mb-1 block text-sm font-medium text-navy">
-          Quantidade estimada
+          Quantidade estimada (mínimo de {MINIMUM_ORDER_QUANTITY} peças)
         </label>
         <input
           {...register("quantity")}
-          placeholder="Ex: 50 peças, 200 peças..."
+          type="number"
+          min={MINIMUM_ORDER_QUANTITY}
+          step="1"
+          inputMode="numeric"
+          placeholder={`A partir de ${MINIMUM_ORDER_QUANTITY} peças`}
           className="w-full rounded-lg border border-black/10 px-4 py-2.5 text-sm focus:border-teal focus:outline-none"
         />
         {errors.quantity && (
