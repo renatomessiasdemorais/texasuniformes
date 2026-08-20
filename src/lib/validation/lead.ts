@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const MINIMUM_ORDER_QUANTITY = 30;
+
 export const segmentOptions = [
   { value: "uniformes-profissionais", label: "Uniformes Profissionais" },
   { value: "linha-hospitalar", label: "Linha Hospitalar" },
@@ -19,7 +21,13 @@ export const leadSchema = z.object({
     "texteis-hotelaria",
     "outro",
   ]),
-  quantity: z.string().min(1, "Informe uma quantidade estimada"),
+  quantity: z
+    .string()
+    .min(1, "Informe uma quantidade estimada")
+    .refine(
+      (value) => Number.parseInt(value, 10) >= MINIMUM_ORDER_QUANTITY,
+      `Atendemos pedidos a partir de ${MINIMUM_ORDER_QUANTITY} peças`
+    ),
   message: z.string().optional(),
 });
 

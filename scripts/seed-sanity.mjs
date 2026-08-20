@@ -81,7 +81,7 @@ const SEGMENTS = [
     ],
     pieces: ["Camisa Social", "Calça Social", "Colete Corporativo", "Jaqueta"],
     faq: [
-      { question: "Qual a quantidade mínima de peças por pedido?", answer: "Trabalhamos sob encomenda para empresas — a quantidade mínima varia conforme o modelo. Fale com nosso time pelo WhatsApp para uma resposta específica ao seu caso." },
+      { question: "Qual a quantidade mínima de peças por pedido?", answer: "Atendemos pedidos sob encomenda para empresas e instituições a partir de 30 peças." },
       { question: "Qual o prazo de produção?", answer: "O prazo depende da quantidade e complexidade da personalização. Após aprovação do orçamento, informamos uma data estimada de entrega." },
       { question: "Como tirar as medidas dos funcionários à distância?", answer: "Enviamos uma tabela de medidas padrão e orientações simples para sua equipe de RH coletar os dados sem precisar de visita presencial." },
     ],
@@ -181,9 +181,9 @@ async function seedSiteSettings() {
   await client.createOrReplace({
     _id: "siteSettings",
     _type: "siteSettings",
-    phone: "(91) 0000-0000",
-    whatsapp: "5591000000000",
-    whatsappMessage: "Olá! Gostaria de solicitar um orçamento de uniformes.",
+    phone: "(91) 98116-1217",
+    whatsapp: "5591981161217",
+    whatsappMessage: "Olá! Preciso de orçamento para 30 peças ou mais. Empresa: ___ Produto: ___ Quantidade: ___ Cidade: ___",
     email: "contato@texasuniformes.com.br",
     address: {
       line1: "Ananindeua, PA – Brasil",

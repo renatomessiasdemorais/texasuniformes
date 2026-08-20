@@ -32,6 +32,32 @@ export {
 /** Shared cache tag for all Sanity-backed content — invalidated on-demand by the /api/revalidate webhook. */
 export const SANITY_CONTENT_TAG = "sanity-content";
 
+function normalizeSiteSettings(data: SiteSettings): SiteSettings {
+  const addressNeedsCorrection =
+    !data.address?.line2 || /a confirmar/i.test(data.address.line2);
+  const messageNeedsQualification =
+    !data.whatsappMessage || !/30\s*peças/i.test(data.whatsappMessage);
+
+  return {
+    ...fallbackSiteSettings,
+    ...data,
+    address: addressNeedsCorrection
+      ? fallbackSiteSettings.address
+      : data.address,
+    whatsappMessage: messageNeedsQualification
+      ? fallbackSiteSettings.whatsappMessage
+      : data.whatsappMessage,
+    social: {
+      ...fallbackSiteSettings.social,
+      ...data.social,
+    },
+    home: {
+      ...fallbackSiteSettings.home,
+      ...data.home,
+    },
+  };
+}
+
 export async function getSiteSettings(): Promise<SiteSettings> {
   "use cache";
   cacheLife("max");
@@ -41,7 +67,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     const data = await sanityClient.fetch<SiteSettings | null>(
       siteSettingsQuery
     );
-    if (data) return data;
+    if (data) return normalizeSiteSettings(data);
   }
   return fallbackSiteSettings;
 }

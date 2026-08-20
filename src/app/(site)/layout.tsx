@@ -13,7 +13,8 @@ const poppins = Poppins({
   weight: ["400", "500", "700"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.texasuniformes.com.br";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
