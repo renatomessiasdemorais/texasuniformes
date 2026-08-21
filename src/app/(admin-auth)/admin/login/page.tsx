@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LockKeyhole } from "lucide-react";
+import { Suspense } from "react";
 import { signInAction } from "./actions";
 
 export const metadata: Metadata = { title: "Administração | Texas Uniformes" };
@@ -10,7 +11,19 @@ const errors: Record<string, string> = {
   "sem-permissao": "Sua conta não possui permissão para acessar o painel.",
 };
 
-export default async function AdminLoginPage({
+export default function AdminLoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  return (
+    <Suspense fallback={<LoginLoading />}>
+      <LoginForm searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function LoginForm({
   searchParams,
 }: {
   searchParams: Promise<{ error?: string }>;
@@ -68,4 +81,8 @@ export default async function AdminLoginPage({
       </section>
     </main>
   );
+}
+
+function LoginLoading() {
+  return <main className="min-h-screen bg-light-bg" aria-label="Carregando área administrativa" />;
 }

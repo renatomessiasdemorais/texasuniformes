@@ -1,4 +1,5 @@
 import { createSupabasePublicClient } from "@/lib/supabase/public";
+import { cacheLife, cacheTag } from "next/cache";
 import type { ClientLogo, FaqItem, Segment, SegmentSlug, SiteSettings, Testimonial } from "@/types/content";
 import {
   fallbackClientLogos,
@@ -9,6 +10,7 @@ import {
 } from "./fallback-data";
 
 export { fallbackBenefits, fallbackProcessSteps } from "./fallback-data";
+export const SITE_CONTENT_TAG = "site-content";
 
 type DbSegment = {
   id: string; slug: string; title: string; short_name: string; hero_headline: string;
@@ -57,6 +59,9 @@ async function fetchSegments(slug?: string): Promise<Segment[] | null> {
 }
 
 export async function getSiteSettings(): Promise<SiteSettings> {
+  "use cache";
+  cacheLife("max");
+  cacheTag(SITE_CONTENT_TAG);
   const supabase = createSupabasePublicClient();
   if (!supabase) return fallbackSiteSettings;
   const { data, error } = await supabase.from("site_settings").select("*").eq("id", true).maybeSingle();
@@ -72,10 +77,25 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   };
 }
 
-export async function getAllSegments(): Promise<Segment[]> { return (await fetchSegments()) ?? fallbackSegments; }
-export async function getSegment(slug: SegmentSlug): Promise<Segment | null> { const result = await fetchSegments(slug); return result?.[0] ?? fallbackSegments.find((segment) => segment.slug === slug) ?? null; }
+export async function getAllSegments(): Promise<Segment[]> {
+  "use cache";
+  cacheLife("max");
+  cacheTag(SITE_CONTENT_TAG);
+  return (await fetchSegments()) ?? fallbackSegments;
+}
+
+export async function getSegment(slug: SegmentSlug): Promise<Segment | null> {
+  "use cache";
+  cacheLife("max");
+  cacheTag(SITE_CONTENT_TAG);
+  const result = await fetchSegments(slug);
+  return result?.[0] ?? fallbackSegments.find((segment) => segment.slug === slug) ?? null;
+}
 
 export async function getTestimonials(): Promise<Testimonial[]> {
+  "use cache";
+  cacheLife("max");
+  cacheTag(SITE_CONTENT_TAG);
   const supabase = createSupabasePublicClient();
   if (!supabase) return fallbackTestimonials;
   const { data, error } = await supabase.from("testimonials").select("id, name, company, quote, avatar_path, avatar_alt").eq("is_published", true).order("position");
@@ -84,6 +104,9 @@ export async function getTestimonials(): Promise<Testimonial[]> {
 }
 
 export async function getClientLogos(): Promise<ClientLogo[]> {
+  "use cache";
+  cacheLife("max");
+  cacheTag(SITE_CONTENT_TAG);
   const supabase = createSupabasePublicClient();
   if (!supabase) return fallbackClientLogos;
   const { data, error } = await supabase.from("client_logos").select("id, name, logo_path, alt").eq("is_published", true).order("position");
@@ -92,6 +115,9 @@ export async function getClientLogos(): Promise<ClientLogo[]> {
 }
 
 export async function getGeneralFaq(): Promise<FaqItem[]> {
+  "use cache";
+  cacheLife("max");
+  cacheTag(SITE_CONTENT_TAG);
   const supabase = createSupabasePublicClient();
   if (!supabase) return fallbackGeneralFaq;
   const { data, error } = await supabase.from("faq_items").select("id, question, answer").is("segment_id", null).eq("is_published", true).order("position");

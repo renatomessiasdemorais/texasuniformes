@@ -1,8 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { SITE_CONTENT_TAG } from "@/lib/content";
 
 export async function saveSiteSettingsAction(formData: FormData) {
   const supabase = await createSupabaseServerClient();
@@ -34,6 +35,7 @@ export async function saveSiteSettingsAction(formData: FormData) {
 
   if (error) redirect("/admin/configuracoes?error=salvar");
 
+  revalidateTag(SITE_CONTENT_TAG, "max");
   revalidatePath("/", "layout");
   revalidatePath("/admin/configuracoes");
   redirect("/admin/configuracoes?success=1");

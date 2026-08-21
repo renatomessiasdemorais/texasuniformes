@@ -1,9 +1,10 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireContentManager } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { SITE_CONTENT_TAG } from "@/lib/content";
 
 function readText(formData: FormData, name: string) {
   return String(formData.get(name) ?? "").trim();
@@ -46,6 +47,7 @@ export async function saveSegmentAction(formData: FormData) {
     redirect(`/admin/linhas-de-produto${id ? `/${id}` : "/nova"}?error=salvar`);
   }
 
+  revalidateTag(SITE_CONTENT_TAG, "max");
   revalidatePath("/", "layout");
   revalidatePath("/admin/linhas-de-produto");
   redirect(`/admin/linhas-de-produto/${result.data.id}?success=salvo`);
@@ -58,6 +60,7 @@ export async function deleteSegmentAction(formData: FormData) {
 
   if (id) await supabase.from("segments").delete().eq("id", id);
 
+  revalidateTag(SITE_CONTENT_TAG, "max");
   revalidatePath("/", "layout");
   revalidatePath("/admin/linhas-de-produto");
   redirect("/admin/linhas-de-produto?success=excluido");
