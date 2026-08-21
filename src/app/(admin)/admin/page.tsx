@@ -4,10 +4,10 @@ import { Building2, CircleHelp, Image, PackageOpen, Settings2, UsersRound } from
 const sections = [
   { title: "Configurações", description: "Contato, redes sociais e destaque da home.", icon: Settings2, href: "/admin/configuracoes" },
   { title: "Linhas de produto", description: "Páginas, benefícios, FAQs e galerias.", icon: PackageOpen, href: "/admin/linhas-de-produto" },
-  { title: "Clientes", description: "Logos das empresas atendidas.", icon: Building2 },
-  { title: "Perguntas frequentes", description: "Dúvidas gerais e por segmento.", icon: CircleHelp },
-  { title: "Biblioteca de imagens", description: "Envie e reutilize fotos no site.", icon: Image },
-  { title: "Depoimentos", description: "Avaliações e casos de clientes.", icon: UsersRound },
+  { title: "Clientes", description: "Logos das empresas atendidas.", icon: Building2, href: "/admin/clientes" },
+  { title: "Perguntas frequentes", description: "Dúvidas gerais e por segmento.", icon: CircleHelp, href: "/admin/perguntas-frequentes" },
+  { title: "Biblioteca de imagens", description: "Envie e reutilize fotos no site.", icon: Image, href: "/admin/imagens" },
+  { title: "Depoimentos", description: "Avaliações e casos de clientes.", icon: UsersRound, href: "/admin/depoimentos" },
 ];
 
 export default function AdminDashboardPage() {
