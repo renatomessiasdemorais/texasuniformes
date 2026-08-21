@@ -1,6 +1,6 @@
 # Texas Uniformes — Site institucional
 
-Redesign do site institucional da Texas Uniformes (fabricação de uniformes sob encomenda desde 1995, Ananindeua/PA). Next.js 16 (App Router, Cache Components) + Tailwind CSS v4 + Sanity CMS (Studio embutido em `/studio`).
+Site institucional da Texas Uniformes, construído com Next.js 16, Tailwind CSS v4 e Supabase. O conteúdo é gerido pelo painel interno em `/admin`.
 
 ## Rodando localmente
 
@@ -9,50 +9,25 @@ npm install
 npm run dev
 ```
 
-Abra [http://localhost:3000](http://localhost:3000). O site funciona **sem nenhuma variável de ambiente configurada** — todo o conteúdo (textos, imagens, depoimentos, FAQ) vem de um fallback local (`src/lib/content/fallback-data.ts`) com imagens placeholder geradas em `public/placeholders/`.
+Abra [http://localhost:3000](http://localhost:3000). Sem as variáveis do Supabase, o site usa o conteúdo de apoio em `src/lib/content/fallback-data.ts`.
 
-## Conectando o CMS (Sanity)
+## Configurando o CMS
 
-Enquanto as variáveis abaixo não forem definidas, o site usa o conteúdo placeholder e o painel em `/studio` mostra uma tela pedindo configuração — isso é esperado.
+1. Copie `.env.local.example` para `.env.local`.
+2. No Supabase, em **Settings → API**, informe `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+3. Aplique as migrações: `supabase db push --linked`.
+4. Acesse `/admin/login` com um usuário que tenha perfil `admin` ou `editor` em `public.profiles`.
 
-1. Copie `.env.local.example` para `.env.local`
-2. Crie um projeto gratuito em [sanity.io/manage](https://www.sanity.io/manage) (ou rode `npx sanity login` e `npx sanity init` a partir desta pasta)
-3. Preencha `NEXT_PUBLIC_SANITY_PROJECT_ID` e `NEXT_PUBLIC_SANITY_DATASET` no `.env.local`
-4. Acesse `/studio` — o painel do Sanity deve carregar normalmente
-5. (Opcional) Para popular o projeto com o mesmo conteúdo placeholder do site, gere um token de escrita em manage.sanity.io (API → Tokens → Editor), exporte como `SANITY_API_WRITE_TOKEN` e rode:
-   ```bash
-   node scripts/seed-sanity.mjs
-   ```
-
-Assim que o Sanity estiver configurado, qualquer conteúdo publicado no Studio passa a substituir automaticamente o placeholder correspondente (o fallback só é usado para o que ainda não foi preenchido).
-
-### Atualização instantânea (webhook)
-
-Por padrão, o conteúdo do Sanity fica em cache por um tempo (para o site carregar rápido) e só é revalidado sozinho de tempos em tempos. Para o site atualizar em segundos sempre que algo for publicado no Studio:
-
-1. Gere um valor aleatório qualquer para `SANITY_REVALIDATE_SECRET` no `.env.local` (e na Vercel, em produção) — pode ser qualquer string longa
-2. Em [manage.sanity.io](https://www.sanity.io/manage) → seu projeto → **API → Webhooks → Create webhook**:
-   - **URL**: `https://SEU-DOMINIO/api/revalidate` (em produção) — para testar localmente, algo como `ngrok` seria necessário, então normalmente só configure o webhook para o domínio de produção
-   - **Dataset**: `production`
-   - **Trigger on**: Create, Update, Delete
-   - **HTTP method**: POST
-   - **Secret**: o mesmo valor de `SANITY_REVALIDATE_SECRET`
-3. Salve — a partir daí, publicar algo no Studio atualiza o site em produção em poucos segundos, sem precisar de novo deploy
-
-## Formulário de orçamento (QuoteForm)
-
-Não passa por nenhum servidor: ao enviar, o formulário monta uma mensagem do WhatsApp já formatada com todos os campos preenchidos (nome, empresa, telefone, segmento, quantidade, mensagem) e abre uma conversa com o número em `siteSettings.whatsapp` pronta para enviar. Se o navegador bloquear a abertura automática, a tela de sucesso mostra um botão "Abrir WhatsApp" com o mesmo link como alternativa.
+O banco contém configurações gerais, linhas de produto, benefícios, galerias, FAQs, logos, depoimentos e a biblioteca pública `site-media` para imagens. As quatro linhas de produto existentes já são carregadas pelas migrações iniciais.
 
 ## Estrutura
 
-- `src/app/(site)/` — páginas do site (Home, Empresa, Clientes, Contato, 4 páginas de segmento)
-- `src/app/studio/` — Sanity Studio embutido (layout próprio, sem header/footer do site)
-- `src/components/` — componentes de UI e seções reutilizáveis
-- `src/lib/content/` — camada de dados: usa Sanity se configurado, senão cai no fallback local
-- `studio/schemaTypes/` — schemas do Sanity (segmento, depoimento, logo de cliente, FAQ, configurações do site)
-- `scripts/generate-placeholders.mjs` — gera as imagens placeholder em `public/placeholders/`
-- `scripts/seed-sanity.mjs` — popula um projeto Sanity vazio com o mesmo conteúdo placeholder
+- `src/app/(site)/` — páginas públicas
+- `src/app/(admin)/` e `src/app/(admin-auth)/` — painel administrativo e autenticação
+- `src/lib/content/` — leitura pública do conteúdo do Supabase, com fallback local
+- `src/lib/supabase/` — clientes e proteção de rotas
+- `supabase/migrations/` — banco, regras de acesso e conteúdo inicial
 
 ## Deploy
 
-Repositório conectado à Vercel — cada push em `main` gera um deploy automático. Configure as variáveis de ambiente acima no painel do projeto na Vercel (Settings → Environment Variables) para ativar o CMS em produção.
+Configure as variáveis do Supabase no provedor de hospedagem antes do deploy. O usuário autenticado precisa ter o papel adequado em `public.profiles`; o acesso ao painel e às políticas de escrita do banco é protegido por RLS.
