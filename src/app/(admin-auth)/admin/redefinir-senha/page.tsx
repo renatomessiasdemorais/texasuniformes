@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LockKeyhole } from "lucide-react";
+import { Suspense } from "react";
 import { updatePasswordAction } from "./actions";
 
 export const metadata: Metadata = { title: "Redefinir senha | Texas Uniformes" };
@@ -10,7 +11,19 @@ const errors: Record<string, string> = {
   "atualizacao-falhou": "Não foi possível atualizar a senha. Solicite um novo link.",
 };
 
-export default async function ResetPasswordPage({
+export default function ResetPasswordPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  return (
+    <Suspense fallback={<ResetPasswordLoading />}>
+      <ResetPasswordForm searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function ResetPasswordForm({
   searchParams,
 }: {
   searchParams: Promise<{ error?: string }>;
@@ -53,4 +66,8 @@ export default async function ResetPasswordPage({
       </section>
     </main>
   );
+}
+
+function ResetPasswordLoading() {
+  return <main className="min-h-screen bg-light-bg" aria-label="Carregando redefinição de senha" />;
 }
