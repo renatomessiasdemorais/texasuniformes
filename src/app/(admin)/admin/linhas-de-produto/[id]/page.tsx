@@ -31,13 +31,20 @@ export default async function SegmentEditorPage({ params, searchParams }: PagePr
   const { data } = isNew ? { data: emptySegment } : await supabase.from("segments").select("*").eq("id", id).maybeSingle();
   if (!data) notFound();
   const segment = data as typeof emptySegment;
+  const { data: galleryImages } = isNew
+    ? { data: [] }
+    : await supabase
+        .from("segment_gallery_images")
+        .select("id, image_path, alt, position")
+        .eq("segment_id", id)
+        .order("position");
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-10 lg:px-8">
       <Link href="/admin/linhas-de-produto" className="text-sm font-semibold text-teal hover:underline">← Linhas de produto</Link>
       <h1 className="mt-5 text-3xl font-bold text-navy">{isNew ? "Nova linha" : `Editar ${segment.title}`}</h1>
       <p className="mt-2 text-text-dark/70">Os campos abaixo definem as informações principais da página pública.</p>
-      {error && <p className="mt-6 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error === "slug" ? "Use apenas letras minúsculas, números e hífens no endereço." : "Preencha os campos obrigatórios e tente novamente."}</p>}
+      {error && <p className="mt-6 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error === "slug" ? "Use apenas letras minúsculas, números e hífens no endereço." : error === "imagens" ? "Envie no máximo 5 imagens JPG, PNG ou WebP de até 5 MB cada." : error === "upload" ? "Não foi possível enviar uma das imagens. Tente novamente." : "Preencha os campos obrigatórios e tente novamente."}</p>}
       {success && <p className="mt-6 rounded-lg bg-teal/10 px-4 py-3 text-sm font-medium text-teal">Linha salva com sucesso.</p>}
 
       <form action={saveSegmentAction} className="mt-8 space-y-8">
@@ -64,13 +71,21 @@ export default async function SegmentEditorPage({ params, searchParams }: PagePr
 
         <section className="rounded-xl border border-black/5 bg-white p-6 shadow-sm">
           <h2 className="text-lg font-bold text-navy">Imagens</h2>
-          <p className="mt-2 text-sm text-text-dark/60">Por enquanto, informe a URL pública da imagem. A biblioteca com envio de arquivos será liberada em seguida.</p>
+          <p className="mt-2 text-sm text-text-dark/60">Defina as imagens de destaque e do card.</p>
           <div className="mt-5 grid gap-5 sm:grid-cols-2">
             <Field name="hero_image_path" label="URL da imagem de destaque" defaultValue={segment.hero_image_path} />
             <Field name="hero_image_alt" label="Descrição da imagem de destaque" defaultValue={segment.hero_image_alt} />
             <Field name="category_image_path" label="URL da imagem do card" defaultValue={segment.category_image_path} />
             <Field name="category_image_alt" label="Descrição da imagem do card" defaultValue={segment.category_image_alt} />
           </div>
+        </section>
+
+        <section className="rounded-xl border border-black/5 bg-white p-6 shadow-sm">
+          <h2 className="text-lg font-bold text-navy">Galeria da categoria</h2>
+          <p className="mt-2 text-sm text-text-dark/60">A galeria não possui limite fixo. Para manter a página leve, recomendamos até 12 fotos. Adicione até 5 arquivos por envio, com até 5 MB cada.</p>
+          <label className="mt-5 block text-sm font-semibold text-navy">Adicionar imagens do computador<input name="gallery_files" type="file" accept="image/jpeg,image/png,image/webp" multiple className="mt-2 block w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 text-sm font-normal text-text-dark" /></label>
+          <label className="mt-5 block text-sm font-semibold text-navy">Adicionar URLs públicas<textarea name="gallery_urls" rows={3} placeholder="Uma URL por linha" className="mt-2 w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 font-normal leading-6 text-text-dark outline-none focus:border-teal" /></label>
+          {galleryImages && galleryImages.length > 0 && <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{galleryImages.map((image) => <label key={image.id} className="overflow-hidden rounded-lg border border-black/10 bg-light-bg"><img src={image.image_path} alt={image.alt} className="h-36 w-full object-cover" /><span className="flex items-center gap-2 p-3 text-sm font-medium text-text-dark"><input name="remove_gallery_image" type="checkbox" value={image.id} className="size-4 accent-teal" />Remover da galeria</span></label>)}</div>}
         </section>
 
         <div className="flex flex-wrap gap-3">
