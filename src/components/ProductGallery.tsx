@@ -5,7 +5,7 @@ export function ProductGallery({ images }: { images: SanityImage[] }) {
   if (images.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:gap-6">
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
       {images.map((image, i) => (
         <div
           key={`${image.src}-${i}`}
@@ -15,7 +15,7 @@ export function ProductGallery({ images }: { images: SanityImage[] }) {
             src={image.src}
             alt={image.alt}
             fill
-            sizes="(min-width: 640px) 50vw, 50vw"
+            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
             className="object-cover"
             placeholder={image.blurDataURL ? "blur" : "empty"}
             blurDataURL={image.blurDataURL}
