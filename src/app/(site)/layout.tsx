@@ -14,6 +14,7 @@ const poppins = Poppins({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const googleAdsTagId = "AW-17241540832";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -41,6 +42,7 @@ export default async function RootLayout({
 }>) {
   const settings = await getSiteSettings();
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  const googleTagId = gaId ?? googleAdsTagId;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -62,27 +64,26 @@ export default async function RootLayout({
 
   return (
     <html lang="pt-BR" className={`${poppins.variable} h-full antialiased`}>
+      <head>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${googleTagId}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-tags-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            ${gaId ? `gtag('config', '${gaId}');` : ""}
+            gtag('config', '${googleAdsTagId}');
+          `}
+        </Script>
+      </head>
       <body className="flex min-h-full flex-col font-sans text-text-dark">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {gaId && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-              strategy="afterInteractive"
-            />
-            <Script id="ga4-init" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${gaId}');
-              `}
-            </Script>
-          </>
-        )}
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
