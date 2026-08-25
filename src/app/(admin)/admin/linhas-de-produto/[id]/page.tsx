@@ -44,7 +44,7 @@ export default async function SegmentEditorPage({ params, searchParams }: PagePr
       <Link href="/admin/linhas-de-produto" className="text-sm font-semibold text-teal hover:underline">← Linhas de produto</Link>
       <h1 className="mt-5 text-3xl font-bold text-navy">{isNew ? "Nova linha" : `Editar ${segment.title}`}</h1>
       <p className="mt-2 text-text-dark/70">Os campos abaixo definem as informações principais da página pública.</p>
-      {error && <p className="mt-6 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error === "slug" ? "Use apenas letras minúsculas, números e hífens no endereço." : error === "imagens" ? "Envie no máximo 5 imagens JPG, PNG ou WebP de até 5 MB cada." : error === "upload" ? "Não foi possível enviar uma das imagens. Tente novamente." : "Preencha os campos obrigatórios e tente novamente."}</p>}
+      {error && <p className="mt-6 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error === "slug" ? "Use apenas letras minúsculas, números e hífens no endereço." : error === "imagens" ? "Envie no máximo 5 imagens JPG, PNG ou WebP de até 5 MB cada." : error === "upload" ? "Não foi possível enviar uma das imagens. Tente novamente." : error === "confirmar-exclusao" ? "A linha não foi excluída: para confirmar, digite EXCLUIR no campo de segurança." : "Preencha os campos obrigatórios e tente novamente."}</p>}
       {success && <p className="mt-6 rounded-lg bg-teal/10 px-4 py-3 text-sm font-medium text-teal">Linha salva com sucesso.</p>}
 
       <form action={saveSegmentAction} className="mt-8 space-y-8">
@@ -93,7 +93,7 @@ export default async function SegmentEditorPage({ params, searchParams }: PagePr
         </div>
       </form>
 
-      {!isNew && <form action={deleteSegmentAction} className="mt-10 border-t border-black/10 pt-6"><input type="hidden" name="id" value={segment.id} /><button className="text-sm font-semibold text-red-700 hover:underline">Excluir esta linha</button></form>}
+      {!isNew && <section className="mt-10 border-t border-black/10 pt-6"><h2 className="text-sm font-bold text-red-700">Excluir esta linha de produto</h2><p className="mt-2 text-sm text-text-dark/70">Esta ação exclui toda a página, seus benefícios, perguntas e galeria. Para remover somente fotos, marque “Remover da galeria” acima e salve a linha.</p><form action={deleteSegmentAction} className="mt-4 flex max-w-md flex-wrap items-end gap-3"><input type="hidden" name="id" value={segment.id} /><label className="flex-1 text-sm font-semibold text-navy">Digite EXCLUIR para confirmar<input name="confirmation" type="text" autoComplete="off" className="mt-2 w-full rounded-lg border border-red-200 bg-white px-3 py-2.5 font-normal text-text-dark outline-none focus:border-red-500" /></label><button className="rounded-lg border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-700 hover:bg-red-50">Excluir permanentemente</button></form></section>}
     </main>
   );
 }

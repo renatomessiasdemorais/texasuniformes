@@ -108,6 +108,10 @@ export async function deleteSegmentAction(formData: FormData) {
   const supabase = await createSupabaseServerClient();
   const id = readText(formData, "id");
 
+  if (readText(formData, "confirmation") !== "EXCLUIR") {
+    redirect(`/admin/linhas-de-produto/${id}?error=confirmar-exclusao`);
+  }
+
   if (id) await supabase.from("segments").delete().eq("id", id);
 
   revalidateTag(SITE_CONTENT_TAG, "max");
