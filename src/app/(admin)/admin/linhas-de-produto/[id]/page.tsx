@@ -82,8 +82,7 @@ export default async function SegmentEditorPage({ params, searchParams }: PagePr
 
         <section className="rounded-xl border border-black/5 bg-white p-6 shadow-sm">
           <h2 className="text-lg font-bold text-navy">Galeria da categoria</h2>
-          <p className="mt-2 text-sm text-text-dark/60">A galeria não possui limite fixo. Para manter a página leve, recomendamos até 12 fotos. Adicione até 5 arquivos por envio, com até 5 MB cada.</p>
-          <label className="mt-5 block text-sm font-semibold text-navy">Adicionar imagens do computador<input name="gallery_files" type="file" accept="image/jpeg,image/png,image/webp" multiple className="mt-2 block w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 text-sm font-normal text-text-dark" /></label>
+          <p className="mt-2 text-sm text-text-dark/60">A galeria não possui limite fixo. Para manter a página leve, recomendamos até 12 fotos. Envie várias imagens na biblioteca e cole abaixo as URLs geradas, uma por linha.</p>
           <label className="mt-5 block text-sm font-semibold text-navy">Adicionar URLs públicas<textarea name="gallery_urls" rows={3} placeholder="Uma URL por linha" className="mt-2 w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 font-normal leading-6 text-text-dark outline-none focus:border-teal" /></label>
           {galleryImages && galleryImages.length > 0 && <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{galleryImages.map((image) => <label key={image.id} className="overflow-hidden rounded-lg border border-black/10 bg-light-bg"><img src={image.image_path} alt={image.alt} className="h-36 w-full object-cover" /><span className="flex items-center gap-2 p-3 text-sm font-medium text-text-dark"><input name="remove_gallery_image" type="checkbox" value={image.id} className="size-4 accent-teal" />Remover da galeria</span></label>)}</div>}
         </section>
