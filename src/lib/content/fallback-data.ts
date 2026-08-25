@@ -33,10 +33,10 @@ export const fallbackSiteSettings: SiteSettings = {
     heroSubheadline:
       "Fabricação própria desde 1995 em Ananindeua/PA — bordado e estamparia personalizados para empresas, hospitais, escolas e hotelaria.",
     heroImage: img(
-      "/images/hero-home-profissionais.png",
-      "Profissionais de diferentes setores com uniformes Texas Uniformes",
-      1680,
-      945
+      "/images/corporativo-1.jpg",
+      "Equipe profissional em ambiente corporativo",
+      1400,
+      933
     ),
   },
 };
@@ -279,6 +279,9 @@ const segmentDefs: Array<{
   },
 ];
 
+const galleryImage = (category: string, position: number, alt: string) =>
+  img(`/images/${category}-${position}.jpg`, alt, 1400, 933);
+
 const segmentImages: Record<
   SegmentSlug,
   {
@@ -287,73 +290,39 @@ const segmentImages: Record<
   }
 > = {
   "uniformes-profissionais": {
-    hero: {
-      src: "/images/hero-uniformes-corporativos.png",
-      alt: "Equipe de recepção com uniformes corporativos",
-      width: 1086,
-      height: 1448,
-    },
+    hero: galleryImage("corporativo", 1, "Equipe profissional em ambiente corporativo"),
     gallery: [
-      {
-        src: "/images/galeria-uniformes-corporativos.png",
-        alt: "Profissionais de diferentes áreas com uniformes de trabalho",
-        width: 1086,
-        height: 1448,
-      },
+      galleryImage("corporativo", 1, "Equipe profissional em ambiente corporativo"),
+      galleryImage("corporativo", 2, "Profissionais colaborando em escritório"),
+      galleryImage("corporativo", 3, "Equipe corporativa em reunião de trabalho"),
+      galleryImage("corporativo", 4, "Profissionais em ambiente de escritório"),
     ],
   },
   "linha-hospitalar": {
-    hero: {
-      src: "/images/hero-linha-hospitalar.png",
-      alt: "Equipe de saúde usando uniformes hospitalares",
-      width: 1680,
-      height: 945,
-    },
+    hero: galleryImage("hospitalar", 1, "Profissionais de saúde em clínica"),
     gallery: [
-      {
-        src: "/images/galeria-linha-hospitalar.png",
-        alt: "Profissional de saúde usando jaleco e scrubs",
-        width: 1086,
-        height: 1448,
-      },
+      galleryImage("hospitalar", 1, "Profissionais de saúde em clínica"),
+      galleryImage("hospitalar", 2, "Equipe médica em colaboração"),
+      galleryImage("hospitalar", 3, "Médico e enfermeira em ambiente hospitalar"),
+      galleryImage("hospitalar", 4, "Equipe médica trabalhando em pesquisa"),
     ],
   },
   "uniformes-escolares": {
-    hero: {
-      src: "/images/hero-uniformes-escolares.png",
-      alt: "Estudantes com uniformes escolares",
-      width: 1680,
-      height: 945,
-    },
+    hero: galleryImage("escolar", 1, "Alunos com uniformes escolares"),
     gallery: [
-      {
-        src: "/images/galeria-uniformes-escolares.png",
-        alt: "Aluno usando uniforme escolar",
-        width: 1086,
-        height: 1448,
-      },
+      galleryImage("escolar", 1, "Alunos com uniformes escolares no corredor"),
+      galleryImage("escolar", 2, "Alunos em atividade escolar ao ar livre"),
+      galleryImage("escolar", 3, "Grupo de estudantes com uniforme"),
+      galleryImage("escolar", 4, "Alunos interagindo em sala de aula"),
     ],
   },
   "texteis-hotelaria": {
-    hero: {
-      src: "/images/hero-texteis-hotelaria.png",
-      alt: "Equipe de hotelaria em recepção de hotel",
-      width: 1680,
-      height: 945,
-    },
+    hero: galleryImage("hotelaria", 1, "Profissional preparando quarto de hotel"),
     gallery: [
-      {
-        src: "/images/galeria-enxoval-hotelaria.png",
-        alt: "Enxoval e equipe de hotelaria em quarto de hotel",
-        width: 1680,
-        height: 945,
-      },
-      {
-        src: "/images/galeria-equipe-hotelaria.png",
-        alt: "Camareiros preparando quarto de hotel",
-        width: 1086,
-        height: 1448,
-      },
+      galleryImage("hotelaria", 1, "Profissional preparando quarto de hotel"),
+      galleryImage("hotelaria", 2, "Recepcionista em hotel"),
+      galleryImage("hotelaria", 3, "Concierge uniformizado em recepção"),
+      galleryImage("hotelaria", 4, "Recepção de hotel com atendimento a hóspedes"),
     ],
   },
 };
