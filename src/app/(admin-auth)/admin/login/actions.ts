@@ -16,3 +16,17 @@ export async function signInAction(formData: FormData) {
 
   redirect("/admin");
 }
+
+export async function sendPasswordResetAction(formData: FormData) {
+  const email = String(formData.get("email") ?? "").trim();
+
+  if (!email) redirect("/admin/login?error=campos-obrigatorios");
+
+  const supabase = await createSupabaseServerClient();
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://texasuniformes.com.br";
+  await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${siteUrl}/auth/confirm?next=/admin/redefinir-senha`,
+  });
+
+  redirect("/admin/login?message=recuperacao-enviada");
+}
