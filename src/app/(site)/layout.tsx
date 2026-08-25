@@ -4,6 +4,7 @@ import Script from "next/script";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { WhatsAppFloatButton } from "@/components/WhatsAppFloatButton";
+import { RecoveryHashRedirect } from "@/components/RecoveryHashRedirect";
 import { getSiteSettings } from "@/lib/content";
 import "../globals.css";
 
@@ -80,6 +81,7 @@ export default async function RootLayout({
         </Script>
       </head>
       <body className="flex min-h-full flex-col font-sans text-text-dark">
+        <RecoveryHashRedirect />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
