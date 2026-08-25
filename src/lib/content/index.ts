@@ -19,18 +19,21 @@ type DbSegment = {
 };
 
 const fallbackForSlug = (slug: string) => fallbackSegments.find((segment) => segment.slug === slug);
+const isPlaceholderPath = (path: string | null) => path?.startsWith("/placeholders/") ?? false;
 
 function toSegment(row: DbSegment, benefits: Array<{ icon: string; title: string; description: string }>, gallery: Array<{ image_path: string; alt: string }>, faq: Array<{ id: string; question: string; answer: string }>): Segment {
   const fallback = fallbackForSlug(row.slug);
   const heroFallback = fallback?.heroImage ?? fallbackSiteSettings.home.heroImage;
   const categoryFallback = fallback?.categoryImage ?? heroFallback;
+  const galleryFallback = fallback?.gallery ?? [];
+  const hasOnlyPlaceholderGallery = gallery.length > 0 && gallery.every((image) => isPlaceholderPath(image.image_path));
   return {
     _id: row.id, slug: row.slug as SegmentSlug, title: row.title, shortName: row.short_name,
     heroHeadline: row.hero_headline, heroSubheadline: row.hero_subheadline ?? "",
-    heroImage: { src: row.hero_image_path ?? heroFallback.src, alt: row.hero_image_alt || heroFallback.alt, width: heroFallback.width, height: heroFallback.height },
-    categoryImage: { src: row.category_image_path ?? categoryFallback.src, alt: row.category_image_alt || categoryFallback.alt, width: categoryFallback.width, height: categoryFallback.height },
+    heroImage: { src: isPlaceholderPath(row.hero_image_path) || !row.hero_image_path ? heroFallback.src : row.hero_image_path, alt: isPlaceholderPath(row.hero_image_path) || !row.hero_image_path ? heroFallback.alt : row.hero_image_alt || heroFallback.alt, width: heroFallback.width, height: heroFallback.height },
+    categoryImage: { src: isPlaceholderPath(row.category_image_path) || !row.category_image_path ? categoryFallback.src : row.category_image_path, alt: isPlaceholderPath(row.category_image_path) || !row.category_image_path ? categoryFallback.alt : row.category_image_alt || categoryFallback.alt, width: categoryFallback.width, height: categoryFallback.height },
     intro: row.intro ?? "", benefits,
-    gallery: gallery.map((image) => ({ src: image.image_path, alt: image.alt, width: 800, height: 1000 })),
+    gallery: hasOnlyPlaceholderGallery ? galleryFallback : gallery.map((image) => ({ src: image.image_path, alt: image.alt, width: 800, height: 1000 })),
     faq: faq.map((item) => ({ _id: item.id, question: item.question, answer: item.answer, category: row.slug as SegmentSlug })),
   };
 }
@@ -72,7 +75,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     social: { instagram: data.instagram_url ?? undefined, facebook: data.facebook_url ?? undefined, linkedin: data.linkedin_url ?? undefined },
     home: {
       heroHeadline: data.home_hero_headline, heroSubheadline: data.home_hero_subheadline,
-      heroImage: { src: data.home_hero_image_path ?? fallbackSiteSettings.home.heroImage.src, alt: data.home_hero_image_alt || fallbackSiteSettings.home.heroImage.alt, width: fallbackSiteSettings.home.heroImage.width, height: fallbackSiteSettings.home.heroImage.height },
+      heroImage: { src: isPlaceholderPath(data.home_hero_image_path) || !data.home_hero_image_path ? fallbackSiteSettings.home.heroImage.src : data.home_hero_image_path, alt: isPlaceholderPath(data.home_hero_image_path) || !data.home_hero_image_path ? fallbackSiteSettings.home.heroImage.alt : data.home_hero_image_alt || fallbackSiteSettings.home.heroImage.alt, width: fallbackSiteSettings.home.heroImage.width, height: fallbackSiteSettings.home.heroImage.height },
     },
   };
 }

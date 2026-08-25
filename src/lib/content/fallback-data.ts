@@ -33,10 +33,10 @@ export const fallbackSiteSettings: SiteSettings = {
     heroSubheadline:
       "Fabricação própria desde 1995 em Ananindeua/PA — bordado e estamparia personalizados para empresas, hospitais, escolas e hotelaria.",
     heroImage: img(
-      "/placeholders/hero-home-v2.jpg",
-      "Uniformes profissionais Texas Uniformes",
-      2400,
-      1350
+      "/images/hero-home-profissionais.png",
+      "Profissionais de diferentes setores com uniformes Texas Uniformes",
+      1680,
+      945
     ),
   },
 };
@@ -100,7 +100,6 @@ const segmentDefs: Array<{
   intro: string;
   benefits: Segment["benefits"];
   faq: Array<{ question: string; answer: string }>;
-  galleryCount: number;
 }> = [
   {
     slug: "uniformes-profissionais",
@@ -145,7 +144,6 @@ const segmentDefs: Array<{
           "Enviamos uma tabela de medidas padrão e orientações simples para sua equipe de RH coletar os dados sem precisar de visita presencial.",
       },
     ],
-    galleryCount: 4,
   },
   {
     slug: "linha-hospitalar",
@@ -190,7 +188,6 @@ const segmentDefs: Array<{
           "Varia conforme a quantidade solicitada. Envie sua necessidade pelo formulário para recebermos e responder com prazo estimado.",
       },
     ],
-    galleryCount: 4,
   },
   {
     slug: "uniformes-escolares",
@@ -235,7 +232,6 @@ const segmentDefs: Array<{
           "Sim, o brasão ou logotipo da instituição pode ser bordado ou estampado nas peças do uniforme.",
       },
     ],
-    galleryCount: 4,
   },
   {
     slug: "texteis-hotelaria",
@@ -280,9 +276,87 @@ const segmentDefs: Array<{
           "Sim, selecionamos tecidos resistentes ao ciclo intenso de lavagem industrial típico da hotelaria.",
       },
     ],
-    galleryCount: 4,
   },
 ];
+
+const segmentImages: Record<
+  SegmentSlug,
+  {
+    hero: { src: string; alt: string; width: number; height: number };
+    gallery: Array<{ src: string; alt: string; width: number; height: number }>;
+  }
+> = {
+  "uniformes-profissionais": {
+    hero: {
+      src: "/images/hero-uniformes-corporativos.png",
+      alt: "Equipe de recepção com uniformes corporativos",
+      width: 1086,
+      height: 1448,
+    },
+    gallery: [
+      {
+        src: "/images/galeria-uniformes-corporativos.png",
+        alt: "Profissionais de diferentes áreas com uniformes de trabalho",
+        width: 1086,
+        height: 1448,
+      },
+    ],
+  },
+  "linha-hospitalar": {
+    hero: {
+      src: "/images/hero-linha-hospitalar.png",
+      alt: "Equipe de saúde usando uniformes hospitalares",
+      width: 1680,
+      height: 945,
+    },
+    gallery: [
+      {
+        src: "/images/galeria-linha-hospitalar.png",
+        alt: "Profissional de saúde usando jaleco e scrubs",
+        width: 1086,
+        height: 1448,
+      },
+    ],
+  },
+  "uniformes-escolares": {
+    hero: {
+      src: "/images/hero-uniformes-escolares.png",
+      alt: "Estudantes com uniformes escolares",
+      width: 1680,
+      height: 945,
+    },
+    gallery: [
+      {
+        src: "/images/galeria-uniformes-escolares.png",
+        alt: "Aluno usando uniforme escolar",
+        width: 1086,
+        height: 1448,
+      },
+    ],
+  },
+  "texteis-hotelaria": {
+    hero: {
+      src: "/images/hero-texteis-hotelaria.png",
+      alt: "Equipe de hotelaria em recepção de hotel",
+      width: 1680,
+      height: 945,
+    },
+    gallery: [
+      {
+        src: "/images/galeria-enxoval-hotelaria.png",
+        alt: "Enxoval e equipe de hotelaria em quarto de hotel",
+        width: 1680,
+        height: 945,
+      },
+      {
+        src: "/images/galeria-equipe-hotelaria.png",
+        alt: "Camareiros preparando quarto de hotel",
+        width: 1086,
+        height: 1448,
+      },
+    ],
+  },
+};
 
 export const fallbackSegments: Segment[] = segmentDefs.map((def) => ({
   _id: `fallback-${def.slug}`,
@@ -291,28 +365,16 @@ export const fallbackSegments: Segment[] = segmentDefs.map((def) => ({
   shortName: def.shortName,
   heroHeadline: def.heroHeadline,
   heroSubheadline: def.heroSubheadline,
-  heroImage: img(
-    `/placeholders/hero-${def.slug}.jpg`,
-    `${def.title} — Texas Uniformes`,
-    2400,
-    1350
-  ),
+  heroImage: segmentImages[def.slug].hero,
   categoryImage: img(
-    `/placeholders/category-${def.slug}.jpg`,
-    `${def.title} — Texas Uniformes`,
-    1024,
-    1365
+    segmentImages[def.slug].gallery[0].src,
+    segmentImages[def.slug].gallery[0].alt,
+    segmentImages[def.slug].gallery[0].width,
+    segmentImages[def.slug].gallery[0].height
   ),
   intro: def.intro,
   benefits: def.benefits,
-  gallery: Array.from({ length: def.galleryCount }, (_, i) =>
-    img(
-      `/placeholders/gallery-${def.slug}-${i + 1}.jpg`,
-      `Peça de ${def.title.toLowerCase()} — Texas Uniformes`,
-      800,
-      1000
-    )
-  ),
+  gallery: segmentImages[def.slug].gallery,
   faq: def.faq.map((f, i) => ({
     _id: `fallback-faq-${def.slug}-${i}`,
     question: f.question,
