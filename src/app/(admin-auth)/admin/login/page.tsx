@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { LockKeyhole } from "lucide-react";
 import { Suspense } from "react";
-import { signInAction } from "./actions";
+import { sendPasswordResetAction, signInAction } from "./actions";
 
 export const metadata: Metadata = { title: "Administração | Texas Uniformes" };
 
@@ -9,12 +9,13 @@ const errors: Record<string, string> = {
   "campos-obrigatorios": "Informe seu e-mail e senha.",
   "credenciais-invalidas": "E-mail ou senha inválidos.",
   "sem-permissao": "Sua conta não possui permissão para acessar o painel.",
+  "link-invalido": "O link expirou ou não é válido. Solicite outro link de recuperação.",
 };
 
 export default function AdminLoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; message?: string }>;
 }) {
   return (
     <Suspense fallback={<LoginLoading />}>
@@ -26,9 +27,9 @@ export default function AdminLoginPage({
 async function LoginForm({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; message?: string }>;
 }) {
-  const { error } = await searchParams;
+  const { error, message } = await searchParams;
 
   return (
     <main className="grid min-h-screen place-items-center bg-light-bg p-6">
@@ -47,6 +48,18 @@ async function LoginForm({
         {error && errors[error] && (
           <p className="mt-5 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
             {errors[error]}
+          </p>
+        )}
+
+        {message === "recuperacao-enviada" && (
+          <p className="mt-5 rounded-lg bg-teal/10 px-4 py-3 text-sm text-teal">
+            Se o e-mail estiver cadastrado, enviamos um link seguro para redefinir a senha.
+          </p>
+        )}
+
+        {message === "senha-atualizada" && (
+          <p className="mt-5 rounded-lg bg-teal/10 px-4 py-3 text-sm text-teal">
+            Senha atualizada. Entre com as novas credenciais.
           </p>
         )}
 
@@ -76,6 +89,26 @@ async function LoginForm({
             className="w-full rounded-lg bg-teal px-4 py-3 font-semibold text-white transition hover:bg-teal/90"
           >
             Entrar no painel
+          </button>
+        </form>
+
+        <form action={sendPasswordResetAction} className="mt-5 space-y-2 border-t border-black/10 pt-5">
+          <label className="block text-sm font-medium text-navy">
+            Esqueceu sua senha?
+            <input
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              placeholder="Digite seu e-mail para receber o link"
+              className="mt-1.5 w-full rounded-lg border border-black/10 px-4 py-3 text-text-dark outline-none transition focus:border-teal focus:ring-2 focus:ring-teal/20"
+            />
+          </label>
+          <button
+            type="submit"
+            className="text-sm font-semibold text-teal transition hover:underline"
+          >
+            Enviar link de recuperação
           </button>
         </form>
       </section>
