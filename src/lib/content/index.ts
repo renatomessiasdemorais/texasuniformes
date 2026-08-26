@@ -77,6 +77,15 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       heroHeadline: data.home_hero_headline, heroSubheadline: data.home_hero_subheadline,
       heroImage: { src: isPlaceholderPath(data.home_hero_image_path) || !data.home_hero_image_path ? fallbackSiteSettings.home.heroImage.src : data.home_hero_image_path, alt: isPlaceholderPath(data.home_hero_image_path) || !data.home_hero_image_path ? fallbackSiteSettings.home.heroImage.alt : data.home_hero_image_alt || fallbackSiteSettings.home.heroImage.alt, width: fallbackSiteSettings.home.heroImage.width, height: fallbackSiteSettings.home.heroImage.height },
     },
+    visibility: {
+      contact: data.show_contact ?? false,
+      socialLinks: data.show_social_links ?? false,
+      homeHero: data.show_home_hero ?? true,
+      clientLogos: data.show_client_logos ?? false,
+      testimonials: data.show_testimonials ?? false,
+      productGalleries: data.show_product_galleries ?? false,
+      faqs: data.show_faqs ?? false,
+    },
   };
 }
 
@@ -102,7 +111,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
   const supabase = createSupabasePublicClient();
   if (!supabase) return fallbackTestimonials;
   const { data, error } = await supabase.from("testimonials").select("id, name, company, quote, avatar_path, avatar_alt").eq("is_published", true).order("position");
-  if (error || !data?.length) return fallbackTestimonials;
+  if (error || !data?.length) return [];
   return data.map((item) => ({ _id: item.id, name: item.name, company: item.company, quote: item.quote, avatar: item.avatar_path ? { src: item.avatar_path, alt: item.avatar_alt, width: 160, height: 160 } : undefined }));
 }
 
@@ -113,7 +122,7 @@ export async function getClientLogos(): Promise<ClientLogo[]> {
   const supabase = createSupabasePublicClient();
   if (!supabase) return fallbackClientLogos;
   const { data, error } = await supabase.from("client_logos").select("id, name, logo_path, alt").eq("is_published", true).order("position");
-  if (error || !data?.length) return fallbackClientLogos;
+  if (error || !data?.length) return [];
   return data.map((item) => ({ _id: item.id, name: item.name, logo: { src: item.logo_path, alt: item.alt, width: 320, height: 160 } }));
 }
 
@@ -124,7 +133,7 @@ export async function getGeneralFaq(): Promise<FaqItem[]> {
   const supabase = createSupabasePublicClient();
   if (!supabase) return fallbackGeneralFaq;
   const { data, error } = await supabase.from("faq_items").select("id, question, answer").is("segment_id", null).eq("is_published", true).order("position");
-  if (error || !data?.length) return fallbackGeneralFaq;
+  if (error || !data?.length) return [];
   return data.map((item) => ({ _id: item.id, question: item.question, answer: item.answer, category: "geral" }));
 }
 

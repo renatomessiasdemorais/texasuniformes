@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { ClientLogosBar } from "@/components/ClientLogosBar";
 import { PageHeader } from "@/components/PageHeader";
 import { getClientLogos } from "@/lib/content";
+import { getSiteSettings } from "@/lib/content";
+import { redirect } from "next/navigation";
 
 // Depoimentos temporariamente desativados no site (conteúdo ainda placeholder) —
 // ver componente TestimonialGrid e getTestimonials em @/lib/content.
@@ -13,7 +15,8 @@ export const metadata: Metadata = {
 };
 
 export default async function ClientesPage() {
-  const logos = await getClientLogos();
+  const [logos, settings] = await Promise.all([getClientLogos(), getSiteSettings()]);
+  if (!settings.visibility.clientLogos) redirect("/");
 
   return (
     <>

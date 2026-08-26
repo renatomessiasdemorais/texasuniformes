@@ -79,4 +79,13 @@ export type SiteSettings = {
     heroSubheadline: string;
     heroImage: SanityImage;
   };
+  visibility: {
+    contact: boolean;
+    socialLinks: boolean;
+    homeHero: boolean;
+    clientLogos: boolean;
+    testimonials: boolean;
+    productGalleries: boolean;
+    faqs: boolean;
+  };
 };

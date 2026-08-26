@@ -30,7 +30,7 @@ export async function SegmentPageTemplate({ segment }: { segment: Segment }) {
         </section>
       )}
 
-      {segment.gallery.length > 0 && (
+      {settings.visibility.productGalleries && segment.gallery.length > 0 && (
         <section className="bg-light-bg py-16">
           <Container>
             <h2 className="mb-8 text-center text-2xl font-bold uppercase tracking-wide text-navy sm:text-3xl">
@@ -50,7 +50,7 @@ export async function SegmentPageTemplate({ segment }: { segment: Segment }) {
         </Container>
       </section>
 
-      {segment.faq.length > 0 && (
+      {settings.visibility.faqs && segment.faq.length > 0 && (
         <section className="bg-light-bg py-20">
           <Container className="max-w-3xl">
             <h2 className="mb-8 text-center text-2xl font-bold uppercase tracking-wide text-navy sm:text-3xl">

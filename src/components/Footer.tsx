@@ -56,11 +56,11 @@ export async function Footer() {
           </ul>
         </div>
 
-        <div>
+        {(settings.visibility.contact || settings.visibility.socialLinks) && <div>
           <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-teal">
             Contato
           </p>
-          <ul className="space-y-3 text-sm text-white/80">
+          {settings.visibility.contact && <ul className="space-y-3 text-sm text-white/80">
             <li className="flex items-start gap-2">
               <Phone size={16} className="mt-0.5 shrink-0" />
               <span>{settings.phone}</span>
@@ -77,8 +77,8 @@ export async function Footer() {
                 {settings.address.line2}
               </span>
             </li>
-          </ul>
-          <div className="mt-4 flex gap-4">
+          </ul>}
+          {settings.visibility.socialLinks && <div className="mt-4 flex gap-4">
             {settings.social.instagram && (
               <a
                 href={settings.social.instagram}
@@ -112,8 +112,8 @@ export async function Footer() {
                 <Briefcase size={20} />
               </a>
             )}
-          </div>
-        </div>
+          </div>}
+        </div>}
       </Container>
 
       <div className="border-t border-white/10 py-6">
