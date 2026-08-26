@@ -18,10 +18,11 @@ export default async function ContatoPage() {
   const showPhone = settings.visibility.phone && Boolean(settings.phone);
   const showEmail = settings.visibility.email && Boolean(settings.email);
   const showAddress = settings.visibility.address && Boolean(settings.address.line1 || settings.address.line2);
-  const showMap = settings.visibility.map && showAddress;
+  const showMap = settings.visibility.map && Boolean(settings.address.mapUrl);
   const hasContactInfo = showPhone || showEmail || showAddress || showMap;
+  const placeFromMapUrl = settings.address.mapUrl.match(/\/maps\/place\/([^/?]+)/)?.[1];
   const mapQuery = encodeURIComponent(
-    `${settings.address.line1} ${settings.address.line2}`
+    placeFromMapUrl ? decodeURIComponent(placeFromMapUrl).replace(/\+/g, " ") : settings.address.mapUrl
   );
 
   return (
