@@ -50,7 +50,7 @@ export default async function SiteSettingsPage({ searchParams }: { searchParams:
             <PublicationToggle name="show_phone" label="Telefone" description="Exibir telefone/WhatsApp onde houver contato." defaultChecked={isEnabled("show_phone", true)} />
             <PublicationToggle name="show_email" label="E-mail" description="Exibir somente quando o e-mail estiver preenchido." defaultChecked={isEnabled("show_email")} />
             <PublicationToggle name="show_address" label="Endereço" description="Exibir as linhas de endereço preenchidas." defaultChecked={isEnabled("show_address")} />
-            <PublicationToggle name="show_map" label="Mapa" description="Exibir o mapa somente quando houver endereço." defaultChecked={isEnabled("show_map")} />
+            <PublicationToggle name="show_map" label="Mapa" description="Exibir somente quando o link do Google Maps estiver preenchido." defaultChecked={isEnabled("show_map")} />
             <PublicationToggle name="show_instagram" label="Instagram" description="Exibir o link somente quando estiver preenchido." defaultChecked={isEnabled("show_instagram")} />
             <PublicationToggle name="show_facebook" label="Facebook" description="Exibir o link somente quando estiver preenchido." defaultChecked={isEnabled("show_facebook")} />
             <PublicationToggle name="show_linkedin" label="LinkedIn" description="Exibir o link somente quando estiver preenchido." defaultChecked={isEnabled("show_linkedin")} />
@@ -58,7 +58,7 @@ export default async function SiteSettingsPage({ searchParams }: { searchParams:
             <PublicationToggle name="show_clients_page" label="Página Clientes" description="Exibir ou ocultar a página e os links Clientes." defaultChecked={isEnabled("show_clients_page", true)} />
             <PublicationToggle name="show_company_page" label="Página Empresa" description="Exibir ou ocultar a página e os links Empresa." defaultChecked={isEnabled("show_company_page", true)} />
             <PublicationToggle name="show_contact_page" label="Página Contato" description="Exibir ou ocultar a página e os links Contato." defaultChecked={isEnabled("show_contact_page", true)} />
-            <PublicationToggle name="show_testimonials" label="Depoimentos" description="Avaliações cadastradas e publicadas." defaultChecked={isEnabled("show_testimonials")} />
+            <PublicationToggle name="show_testimonials" label="Depoimentos na home" description="Exibir avaliações cadastradas na página inicial; não existe uma página própria de depoimentos." defaultChecked={isEnabled("show_testimonials")} />
             <PublicationToggle name="show_product_galleries" label="Galerias de produtos" description="Fotos nas páginas de cada linha." defaultChecked={isEnabled("show_product_galleries")} />
             <PublicationToggle name="show_faqs" label="Perguntas frequentes" description="Perguntas nas páginas de cada linha." defaultChecked={isEnabled("show_faqs")} />
           </div>
