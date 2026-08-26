@@ -3,8 +3,8 @@ import Link from "next/link";
 import { BenefitsBar } from "@/components/BenefitsBar";
 import { PageHeader } from "@/components/PageHeader";
 import { Container } from "@/components/ui/Container";
-import { fallbackBenefits } from "@/lib/content";
-import { segmentNavLinks } from "@/lib/nav-links";
+import { fallbackBenefits, getAllSegments, getSiteSettings } from "@/lib/content";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Empresa",
@@ -12,7 +12,9 @@ export const metadata: Metadata = {
     "Conheça a Texas Uniformes: fabricação própria de uniformes profissionais desde 1995 em Ananindeua/PA.",
 };
 
-export default function EmpresaPage() {
+export default async function EmpresaPage() {
+  const [settings, segments] = await Promise.all([getSiteSettings(), getAllSegments()]);
+  if (!settings.visibility.companyPage) redirect("/");
   return (
     <>
       <PageHeader
@@ -51,13 +53,13 @@ export default function EmpresaPage() {
             Linhas de produto
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {segmentNavLinks.map((link) => (
+            {segments.map((segment) => (
               <Link
-                key={link.href}
-                href={link.href}
+                key={segment.slug}
+                href={`/${segment.slug}`}
                 className="rounded-xl border border-black/10 p-6 text-center font-semibold uppercase tracking-wide text-navy transition-colors hover:border-teal hover:text-teal"
               >
-                {link.label}
+                {segment.title}
               </Link>
             ))}
           </div>

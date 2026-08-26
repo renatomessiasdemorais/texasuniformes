@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { WhatsAppFloatButton } from "@/components/WhatsAppFloatButton";
 import { RecoveryHashRedirect } from "@/components/RecoveryHashRedirect";
-import { getSiteSettings } from "@/lib/content";
+import { getAllSegments, getSiteSettings } from "@/lib/content";
 import "../globals.css";
 
 const poppins = Poppins({
@@ -41,7 +41,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const settings = await getSiteSettings();
+  const [settings, segments] = await Promise.all([getSiteSettings(), getAllSegments()]);
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
   const googleTagId = gaId ?? googleAdsTagId;
 
@@ -86,7 +86,7 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Header showClients={settings.visibility.clientLogos} />
+        <Header showCompany={settings.visibility.companyPage} showClients={settings.visibility.clientsPage} showContact={settings.visibility.contactPage} segmentLinks={segments.map((segment) => ({ href: `/${segment.slug}`, label: segment.title }))} />
         <main className="flex-1">{children}</main>
         <Footer />
         <WhatsAppFloatButton />

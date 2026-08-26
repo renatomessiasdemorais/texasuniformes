@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function ClientesPage() {
   const [logos, settings] = await Promise.all([getClientLogos(), getSiteSettings()]);
-  if (!settings.visibility.clientLogos) redirect("/");
+  if (!settings.visibility.clientsPage) redirect("/");
 
   return (
     <>
@@ -25,7 +25,7 @@ export default async function ClientesPage() {
         subtitle="Empresas, hospitais, escolas e hotéis que confiam na Texas Uniformes."
       />
 
-      <ClientLogosBar logos={logos} />
+      {settings.visibility.clientLogos && <ClientLogosBar logos={logos} />}
     </>
   );
 }

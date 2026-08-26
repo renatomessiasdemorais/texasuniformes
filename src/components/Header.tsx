@@ -7,7 +7,9 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { mainNavLinks, segmentNavLinks } from "@/lib/nav-links";
 
-export function Header({ showClients = true }: { showClients?: boolean }) {
+type NavLink = { href: string; label: string };
+
+export function Header({ showCompany = true, showClients = true, showContact = true, segmentLinks = segmentNavLinks }: { showCompany?: boolean; showClients?: boolean; showContact?: boolean; segmentLinks?: NavLink[] }) {
   const [open, setOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
   const pathname = usePathname();
@@ -41,7 +43,7 @@ export function Header({ showClients = true }: { showClients?: boolean }) {
             </button>
             {productsOpen && (
               <div className="absolute left-0 top-full w-64 rounded-lg bg-white py-2 text-text-dark shadow-xl">
-                {segmentNavLinks.map((link) => (
+                {segmentLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -54,7 +56,7 @@ export function Header({ showClients = true }: { showClients?: boolean }) {
             )}
           </div>
 
-          {mainNavLinks.slice(1).filter((link) => showClients || link.href !== "/clientes").map((link) => (
+          {mainNavLinks.slice(1).filter((link) => (showCompany || link.href !== "/empresa") && (showClients || link.href !== "/clientes") && (showContact || link.href !== "/contato")).map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -67,12 +69,12 @@ export function Header({ showClients = true }: { showClients?: boolean }) {
           ))}
         </nav>
 
-        <Link
+        {showContact && <Link
           href="/contato"
           className="hidden rounded-full bg-teal px-6 py-2.5 text-sm font-semibold uppercase tracking-wide text-white transition-opacity hover:opacity-90 lg:inline-block"
         >
           Solicitar orçamento
-        </Link>
+        </Link>}
 
         <button
           className="lg:hidden"
@@ -86,7 +88,7 @@ export function Header({ showClients = true }: { showClients?: boolean }) {
       {open && (
         <div className="border-t border-white/10 bg-navy lg:hidden">
           <Container className="flex flex-col gap-1 py-4">
-            {mainNavLinks.filter((link) => showClients || link.href !== "/clientes").map((link) => (
+            {mainNavLinks.filter((link) => (showCompany || link.href !== "/empresa") && (showClients || link.href !== "/clientes") && (showContact || link.href !== "/contato")).map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -96,10 +98,10 @@ export function Header({ showClients = true }: { showClients?: boolean }) {
                 {link.label}
               </Link>
             ))}
-            <p className="mt-2 px-2 text-xs uppercase tracking-widest text-white/50">
+            {segmentLinks.length > 0 && <p className="mt-2 px-2 text-xs uppercase tracking-widest text-white/50">
               Produtos
-            </p>
-            {segmentNavLinks.map((link) => (
+            </p>}
+            {segmentLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -109,13 +111,13 @@ export function Header({ showClients = true }: { showClients?: boolean }) {
                 {link.label}
               </Link>
             ))}
-            <Link
+            {showContact && <Link
               href="/contato"
               onClick={() => setOpen(false)}
               className="mt-3 rounded-full bg-teal px-6 py-3 text-center text-sm font-semibold uppercase tracking-wide"
             >
               Solicitar orçamento
-            </Link>
+            </Link>}
           </Container>
         </div>
       )}

@@ -44,7 +44,8 @@ async function fetchSegments(slug?: string): Promise<Segment[] | null> {
   let query = supabase.from("segments").select("id, slug, title, short_name, hero_headline, hero_subheadline, hero_image_path, hero_image_alt, category_image_path, category_image_alt, intro").eq("is_published", true).order("position");
   if (slug) query = query.eq("slug", slug);
   const { data: rows, error } = await query;
-  if (error || !rows?.length) return null;
+  if (error) return null;
+  if (!rows?.length) return [];
 
   const ids = rows.map((row) => row.id);
   const [benefitsResult, galleryResult, faqResult] = await Promise.all([
@@ -85,6 +86,16 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       testimonials: data.show_testimonials ?? false,
       productGalleries: data.show_product_galleries ?? false,
       faqs: data.show_faqs ?? false,
+      phone: data.show_phone ?? true,
+      email: data.show_email ?? false,
+      address: data.show_address ?? false,
+      map: data.show_map ?? false,
+      instagram: data.show_instagram ?? false,
+      facebook: data.show_facebook ?? false,
+      linkedin: data.show_linkedin ?? false,
+      companyPage: data.show_company_page ?? true,
+      contactPage: data.show_contact_page ?? true,
+      clientsPage: data.show_clients_page ?? true,
     },
   };
 }
@@ -101,7 +112,7 @@ export async function getSegment(slug: SegmentSlug): Promise<Segment | null> {
   cacheLife("max");
   cacheTag(SITE_CONTENT_TAG);
   const result = await fetchSegments(slug);
-  return result?.[0] ?? fallbackSegments.find((segment) => segment.slug === slug) ?? null;
+  return result ? result[0] ?? null : fallbackSegments.find((segment) => segment.slug === slug) ?? null;
 }
 
 export async function getTestimonials(): Promise<Testimonial[]> {
@@ -122,7 +133,7 @@ export async function getClientLogos(): Promise<ClientLogo[]> {
   const supabase = createSupabasePublicClient();
   if (!supabase) return fallbackClientLogos;
   const { data, error } = await supabase.from("client_logos").select("id, name, logo_path, alt").eq("is_published", true).order("position");
-  if (error || !data?.length) return [];
+  if (error || !data?.length) return fallbackClientLogos;
   return data.map((item) => ({ _id: item.id, name: item.name, logo: { src: item.logo_path, alt: item.alt, width: 320, height: 160 } }));
 }
 

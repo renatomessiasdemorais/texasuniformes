@@ -2,15 +2,20 @@ import Link from "next/link";
 import { cacheLife, cacheTag } from "next/cache";
 import { AtSign, Briefcase, Globe, Mail, MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { getSiteSettings, SITE_CONTENT_TAG } from "@/lib/content";
-import { mainNavLinks, segmentNavLinks } from "@/lib/nav-links";
+import { getAllSegments, getSiteSettings, SITE_CONTENT_TAG } from "@/lib/content";
+import { mainNavLinks } from "@/lib/nav-links";
 
 export async function Footer() {
   "use cache";
   cacheLife("days");
   cacheTag(SITE_CONTENT_TAG);
 
-  const settings = await getSiteSettings();
+  const [settings, segments] = await Promise.all([getSiteSettings(), getAllSegments()]);
+  const segmentLinks = segments.map((segment) => ({ href: `/${segment.slug}`, label: segment.title }));
+  const showPhone = settings.visibility.phone && Boolean(settings.phone);
+  const showEmail = settings.visibility.email && Boolean(settings.email);
+  const showAddress = settings.visibility.address && Boolean(settings.address.line1 || settings.address.line2);
+  const showSocial = (settings.visibility.instagram && Boolean(settings.social.instagram)) || (settings.visibility.facebook && Boolean(settings.social.facebook)) || (settings.visibility.linkedin && Boolean(settings.social.linkedin));
   const year = new Date().getFullYear();
 
   return (
@@ -31,7 +36,7 @@ export async function Footer() {
             Produtos
           </p>
           <ul className="space-y-2 text-sm text-white/80">
-            {segmentNavLinks.map((link) => (
+            {segmentLinks.map((link) => (
               <li key={link.href}>
                 <Link href={link.href} className="hover:text-white">
                   {link.label}
@@ -46,7 +51,7 @@ export async function Footer() {
             Institucional
           </p>
           <ul className="space-y-2 text-sm text-white/80">
-            {mainNavLinks.filter((link) => settings.visibility.clientLogos || link.href !== "/clientes").map((link) => (
+            {mainNavLinks.filter((link) => (settings.visibility.companyPage || link.href !== "/empresa") && (settings.visibility.clientsPage || link.href !== "/clientes") && (settings.visibility.contactPage || link.href !== "/contato")).map((link) => (
               <li key={link.href}>
                 <Link href={link.href} className="hover:text-white">
                   {link.label}
@@ -56,30 +61,30 @@ export async function Footer() {
           </ul>
         </div>
 
-        {(settings.visibility.contact || settings.visibility.socialLinks) && <div>
+        {(showPhone || showEmail || showAddress || showSocial) && <div>
           <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-teal">
             Contato
           </p>
-          {settings.visibility.contact && <ul className="space-y-3 text-sm text-white/80">
-            <li className="flex items-start gap-2">
+          <ul className="space-y-3 text-sm text-white/80">
+            {showPhone && <li className="flex items-start gap-2">
               <Phone size={16} className="mt-0.5 shrink-0" />
               <span>{settings.phone}</span>
-            </li>
-            <li className="flex items-start gap-2">
+            </li>}
+            {showEmail && <li className="flex items-start gap-2">
               <Mail size={16} className="mt-0.5 shrink-0" />
               <span>{settings.email}</span>
-            </li>
-            <li className="flex items-start gap-2">
+            </li>}
+            {showAddress && <li className="flex items-start gap-2">
               <MapPin size={16} className="mt-0.5 shrink-0" />
               <span>
                 {settings.address.line1}
                 <br />
                 {settings.address.line2}
               </span>
-            </li>
-          </ul>}
-          {settings.visibility.socialLinks && <div className="mt-4 flex gap-4">
-            {settings.social.instagram && (
+            </li>}
+          </ul>
+          {showSocial && <div className="mt-4 flex gap-4">
+            {settings.visibility.instagram && settings.social.instagram && (
               <a
                 href={settings.social.instagram}
                 target="_blank"
@@ -90,7 +95,7 @@ export async function Footer() {
                 <AtSign size={20} />
               </a>
             )}
-            {settings.social.facebook && (
+            {settings.visibility.facebook && settings.social.facebook && (
               <a
                 href={settings.social.facebook}
                 target="_blank"
@@ -101,7 +106,7 @@ export async function Footer() {
                 <Globe size={20} />
               </a>
             )}
-            {settings.social.linkedin && (
+            {settings.visibility.linkedin && settings.social.linkedin && (
               <a
                 href={settings.social.linkedin}
                 target="_blank"

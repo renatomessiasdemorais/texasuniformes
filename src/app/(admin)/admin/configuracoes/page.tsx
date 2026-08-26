@@ -47,9 +47,17 @@ export default async function SiteSettingsPage({ searchParams }: { searchParams:
           <p className="mt-2 text-sm text-text-dark/70">Desmarque uma área enquanto o conteúdo estiver incompleto. Os dados continuam salvos no painel e podem ser publicados novamente a qualquer momento.</p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             <PublicationToggle name="show_home_hero" label="Destaque da página inicial" description="Banner principal da home." defaultChecked={isEnabled("show_home_hero", true)} />
-            <PublicationToggle name="show_contact" label="Dados de contato" description="Telefone, e-mail, endereço e mapa." defaultChecked={isEnabled("show_contact")} />
-            <PublicationToggle name="show_social_links" label="Redes sociais" description="Links de Instagram, Facebook e LinkedIn." defaultChecked={isEnabled("show_social_links")} />
-            <PublicationToggle name="show_client_logos" label="Clientes" description="Logos na home e na página de clientes." defaultChecked={isEnabled("show_client_logos")} />
+            <PublicationToggle name="show_phone" label="Telefone" description="Exibir telefone/WhatsApp onde houver contato." defaultChecked={isEnabled("show_phone", true)} />
+            <PublicationToggle name="show_email" label="E-mail" description="Exibir somente quando o e-mail estiver preenchido." defaultChecked={isEnabled("show_email")} />
+            <PublicationToggle name="show_address" label="Endereço" description="Exibir as linhas de endereço preenchidas." defaultChecked={isEnabled("show_address")} />
+            <PublicationToggle name="show_map" label="Mapa" description="Exibir o mapa somente quando houver endereço." defaultChecked={isEnabled("show_map")} />
+            <PublicationToggle name="show_instagram" label="Instagram" description="Exibir o link somente quando estiver preenchido." defaultChecked={isEnabled("show_instagram")} />
+            <PublicationToggle name="show_facebook" label="Facebook" description="Exibir o link somente quando estiver preenchido." defaultChecked={isEnabled("show_facebook")} />
+            <PublicationToggle name="show_linkedin" label="LinkedIn" description="Exibir o link somente quando estiver preenchido." defaultChecked={isEnabled("show_linkedin")} />
+            <PublicationToggle name="show_client_logos" label="Logos de clientes na home" description="Exibir a faixa de logos na página inicial." defaultChecked={isEnabled("show_client_logos")} />
+            <PublicationToggle name="show_clients_page" label="Página Clientes" description="Exibir ou ocultar a página e os links Clientes." defaultChecked={isEnabled("show_clients_page", true)} />
+            <PublicationToggle name="show_company_page" label="Página Empresa" description="Exibir ou ocultar a página e os links Empresa." defaultChecked={isEnabled("show_company_page", true)} />
+            <PublicationToggle name="show_contact_page" label="Página Contato" description="Exibir ou ocultar a página e os links Contato." defaultChecked={isEnabled("show_contact_page", true)} />
             <PublicationToggle name="show_testimonials" label="Depoimentos" description="Avaliações cadastradas e publicadas." defaultChecked={isEnabled("show_testimonials")} />
             <PublicationToggle name="show_product_galleries" label="Galerias de produtos" description="Fotos nas páginas de cada linha." defaultChecked={isEnabled("show_product_galleries")} />
             <PublicationToggle name="show_faqs" label="Perguntas frequentes" description="Perguntas nas páginas de cada linha." defaultChecked={isEnabled("show_faqs")} />
