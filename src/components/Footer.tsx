@@ -46,7 +46,7 @@ export async function Footer() {
             Institucional
           </p>
           <ul className="space-y-2 text-sm text-white/80">
-            {mainNavLinks.map((link) => (
+            {mainNavLinks.filter((link) => settings.visibility.clientLogos || link.href !== "/clientes").map((link) => (
               <li key={link.href}>
                 <Link href={link.href} className="hover:text-white">
                   {link.label}
