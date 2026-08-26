@@ -7,7 +7,7 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { mainNavLinks, segmentNavLinks } from "@/lib/nav-links";
 
-export function Header() {
+export function Header({ showClients = true }: { showClients?: boolean }) {
   const [open, setOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
   const pathname = usePathname();
@@ -54,7 +54,7 @@ export function Header() {
             )}
           </div>
 
-          {mainNavLinks.slice(1).map((link) => (
+          {mainNavLinks.slice(1).filter((link) => showClients || link.href !== "/clientes").map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -86,7 +86,7 @@ export function Header() {
       {open && (
         <div className="border-t border-white/10 bg-navy lg:hidden">
           <Container className="flex flex-col gap-1 py-4">
-            {mainNavLinks.map((link) => (
+            {mainNavLinks.filter((link) => showClients || link.href !== "/clientes").map((link) => (
               <Link
                 key={link.href}
                 href={link.href}

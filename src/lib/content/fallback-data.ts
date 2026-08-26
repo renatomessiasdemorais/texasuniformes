@@ -39,6 +39,15 @@ export const fallbackSiteSettings: SiteSettings = {
       945
     ),
   },
+  visibility: {
+    contact: false,
+    socialLinks: false,
+    homeHero: true,
+    clientLogos: false,
+    testimonials: false,
+    productGalleries: false,
+    faqs: false,
+  },
 };
 
 export const fallbackBenefits = [

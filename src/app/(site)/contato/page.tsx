@@ -26,12 +26,12 @@ export default async function ContatoPage() {
 
       <section className="bg-white py-16">
         <Container className="grid gap-12 lg:grid-cols-2">
-          <div>
+          {settings.visibility.contact && <div>
             <h2 className="mb-6 text-2xl font-bold uppercase tracking-wide text-navy">
               Solicite seu orçamento
             </h2>
             <QuoteForm whatsapp={settings.whatsapp} />
-          </div>
+          </div>}
 
           <div>
             <h2 className="mb-6 text-2xl font-bold uppercase tracking-wide text-navy">

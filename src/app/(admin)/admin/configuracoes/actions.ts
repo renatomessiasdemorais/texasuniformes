@@ -14,6 +14,7 @@ export async function saveSiteSettingsAction(formData: FormData) {
   if (!user) redirect("/admin/login");
 
   const value = (name: string) => String(formData.get(name) ?? "").trim();
+  const isEnabled = (name: string) => formData.get(name) === "on";
   const { error } = await supabase.from("site_settings").upsert({
     id: true,
     phone: value("phone"),
@@ -30,6 +31,13 @@ export async function saveSiteSettingsAction(formData: FormData) {
     home_hero_subheadline: value("home_hero_subheadline"),
     home_hero_image_path: value("home_hero_image_path") || null,
     home_hero_image_alt: value("home_hero_image_alt"),
+    show_contact: isEnabled("show_contact"),
+    show_social_links: isEnabled("show_social_links"),
+    show_home_hero: isEnabled("show_home_hero"),
+    show_client_logos: isEnabled("show_client_logos"),
+    show_testimonials: isEnabled("show_testimonials"),
+    show_product_galleries: isEnabled("show_product_galleries"),
+    show_faqs: isEnabled("show_faqs"),
     updated_by: user.id,
   });
 

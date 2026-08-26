@@ -2,32 +2,34 @@ import { BenefitsBar } from "@/components/BenefitsBar";
 import { ClientLogosBar } from "@/components/ClientLogosBar";
 import { Hero } from "@/components/Hero";
 import { ProcessSteps } from "@/components/ProcessSteps";
-// Depoimentos temporariamente desativados no site (conteúdo ainda placeholder) —
-// ver componente TestimonialCarousel e getTestimonials em @/lib/content.
+import { TestimonialCarousel } from "@/components/TestimonialCarousel";
 import {
   fallbackBenefits,
   fallbackProcessSteps,
   getClientLogos,
   getSiteSettings,
+  getTestimonials,
 } from "@/lib/content";
 
 export default async function Home() {
-  const [settings, logos] = await Promise.all([
+  const [settings, logos, testimonials] = await Promise.all([
     getSiteSettings(),
     getClientLogos(),
+    getTestimonials(),
   ]);
 
   return (
     <>
-      <Hero
+      {settings.visibility.homeHero && <Hero
         headline={settings.home.heroHeadline}
         subheadline={settings.home.heroSubheadline}
         image={settings.home.heroImage}
         priority
-      />
+      />}
       <BenefitsBar benefits={fallbackBenefits} />
       <ProcessSteps steps={fallbackProcessSteps} />
-      <ClientLogosBar logos={logos} />
+      {settings.visibility.clientLogos && <ClientLogosBar logos={logos} />}
+      {settings.visibility.testimonials && <TestimonialCarousel testimonials={testimonials} />}
     </>
   );
 }

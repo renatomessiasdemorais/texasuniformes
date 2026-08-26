@@ -15,6 +15,7 @@ export default async function SiteSettingsPage({ searchParams }: { searchParams:
   ]);
 
   const value = (key: string) => (settings?.[key] as string | null | undefined) ?? "";
+  const isEnabled = (key: string, fallback = false) => (settings?.[key] as boolean | null | undefined) ?? fallback;
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-10 lg:px-8">
@@ -38,6 +39,20 @@ export default async function SiteSettingsPage({ searchParams }: { searchParams:
             <Field label="Endereço — linha 1" name="address_line1" defaultValue={value("address_line1")} />
             <Field label="Endereço — linha 2" name="address_line2" defaultValue={value("address_line2")} />
             <Field label="Link do Google Maps" name="map_url" type="url" defaultValue={value("map_url")} className="sm:col-span-2" />
+          </div>
+        </fieldset>
+
+        <fieldset className="rounded-xl bg-white p-6 shadow-sm">
+          <legend className="px-1 text-lg font-bold text-navy">Disponibilidade no site público</legend>
+          <p className="mt-2 text-sm text-text-dark/70">Desmarque uma área enquanto o conteúdo estiver incompleto. Os dados continuam salvos no painel e podem ser publicados novamente a qualquer momento.</p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <PublicationToggle name="show_home_hero" label="Destaque da página inicial" description="Banner principal da home." defaultChecked={isEnabled("show_home_hero", true)} />
+            <PublicationToggle name="show_contact" label="Dados de contato" description="Telefone, e-mail, endereço e mapa." defaultChecked={isEnabled("show_contact")} />
+            <PublicationToggle name="show_social_links" label="Redes sociais" description="Links de Instagram, Facebook e LinkedIn." defaultChecked={isEnabled("show_social_links")} />
+            <PublicationToggle name="show_client_logos" label="Clientes" description="Logos na home e na página de clientes." defaultChecked={isEnabled("show_client_logos")} />
+            <PublicationToggle name="show_testimonials" label="Depoimentos" description="Avaliações cadastradas e publicadas." defaultChecked={isEnabled("show_testimonials")} />
+            <PublicationToggle name="show_product_galleries" label="Galerias de produtos" description="Fotos nas páginas de cada linha." defaultChecked={isEnabled("show_product_galleries")} />
+            <PublicationToggle name="show_faqs" label="Perguntas frequentes" description="Perguntas nas páginas de cada linha." defaultChecked={isEnabled("show_faqs")} />
           </div>
         </fieldset>
 
@@ -78,4 +93,8 @@ function Field({ label, name, defaultValue, type = "text", className = "", requi
 
 function TextArea({ label, name, defaultValue }: { label: string; name: string; defaultValue?: string }) {
   return <label className="block text-sm font-medium text-navy">{label}<textarea name={name} defaultValue={defaultValue} rows={3} className="mt-1.5 w-full rounded-lg border border-black/10 px-3 py-2.5 text-text-dark outline-none focus:border-teal focus:ring-2 focus:ring-teal/20" /></label>;
+}
+
+function PublicationToggle({ name, label, description, defaultChecked }: { name: string; label: string; description: string; defaultChecked: boolean }) {
+  return <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-black/10 p-4 transition hover:border-teal/50"><input name={name} type="checkbox" defaultChecked={defaultChecked} className="mt-1 h-4 w-4 accent-teal"/><span><span className="block font-semibold text-navy">{label}</span><span className="mt-0.5 block text-sm text-text-dark/70">{description}</span></span></label>;
 }

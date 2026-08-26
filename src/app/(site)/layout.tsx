@@ -86,7 +86,7 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Header />
+        <Header showClients={settings.visibility.clientLogos} />
         <main className="flex-1">{children}</main>
         <Footer />
         <WhatsAppFloatButton />
