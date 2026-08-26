@@ -38,6 +38,16 @@ export async function saveSiteSettingsAction(formData: FormData) {
     show_testimonials: isEnabled("show_testimonials"),
     show_product_galleries: isEnabled("show_product_galleries"),
     show_faqs: isEnabled("show_faqs"),
+    show_phone: isEnabled("show_phone"),
+    show_email: isEnabled("show_email"),
+    show_address: isEnabled("show_address"),
+    show_map: isEnabled("show_map"),
+    show_instagram: isEnabled("show_instagram"),
+    show_facebook: isEnabled("show_facebook"),
+    show_linkedin: isEnabled("show_linkedin"),
+    show_company_page: isEnabled("show_company_page"),
+    show_contact_page: isEnabled("show_contact_page"),
+    show_clients_page: isEnabled("show_clients_page"),
     updated_by: user.id,
   });
 

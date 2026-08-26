@@ -87,5 +87,15 @@ export type SiteSettings = {
     testimonials: boolean;
     productGalleries: boolean;
     faqs: boolean;
+    phone: boolean;
+    email: boolean;
+    address: boolean;
+    map: boolean;
+    instagram: boolean;
+    facebook: boolean;
+    linkedin: boolean;
+    companyPage: boolean;
+    contactPage: boolean;
+    clientsPage: boolean;
   };
 };

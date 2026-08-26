@@ -47,6 +47,16 @@ export const fallbackSiteSettings: SiteSettings = {
     testimonials: false,
     productGalleries: false,
     faqs: false,
+    phone: true,
+    email: false,
+    address: false,
+    map: false,
+    instagram: false,
+    facebook: false,
+    linkedin: false,
+    companyPage: true,
+    contactPage: true,
+    clientsPage: true,
   },
 };
 
