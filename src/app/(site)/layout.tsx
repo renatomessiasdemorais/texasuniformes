@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { WhatsAppFloatButton } from "@/components/WhatsAppFloatButton";
 import { RecoveryHashRedirect } from "@/components/RecoveryHashRedirect";
 import { getAllSegments, getSiteSettings } from "@/lib/content";
+import { GA4_MEASUREMENT_ID } from "@/lib/gtag";
 import "../globals.css";
 
 const poppins = Poppins({
@@ -14,7 +15,7 @@ const poppins = Poppins({
   weight: ["400", "500", "700"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.texasuniformes.com.br";
 const googleAdsTagId = "AW-17241540832";
 
 export const metadata: Metadata = {
@@ -42,7 +43,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const [settings, segments] = await Promise.all([getSiteSettings(), getAllSegments()]);
-  const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  const gaId = process.env.NEXT_PUBLIC_GA_ID ?? GA4_MEASUREMENT_ID;
   const googleTagId = gaId ?? googleAdsTagId;
 
   const jsonLd = {
