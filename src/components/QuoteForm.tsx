@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { CheckCircle2 } from "lucide-react";
 import { type LeadInput, leadSchema, segmentOptions } from "@/lib/validation/lead";
 import { buildQuoteMessage, buildWhatsAppUrl } from "@/lib/whatsapp";
+import { conversionLabels, trackLead } from "@/lib/gtag";
 import type { SegmentSlug } from "@/types/content";
 
 export function QuoteForm({
@@ -36,6 +37,10 @@ export function QuoteForm({
 
     // Open synchronously (no awaits before this) so browsers don't treat it as a popup.
     window.open(href, "_blank", "noopener,noreferrer");
+
+    // Depois do window.open, para que a medicao nunca atrase nem bloqueie a aba.
+    trackLead(conversionLabels.quoteFormSubmit, "orcamento_enviado");
+
     setWaHref(href);
   };
 
