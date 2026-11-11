@@ -4,7 +4,7 @@ import { SEGMENT_SLUGS } from "@/lib/content";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["", "/empresa", "/clientes", "/contato"];
+  const staticRoutes = ["", "/empresa", "/clientes", "/contato", "/orcamento"];
   const routes = [...staticRoutes, ...SEGMENT_SLUGS.map((slug) => `/${slug}`)];
 
   return routes.map((route) => ({
