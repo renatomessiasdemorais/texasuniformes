@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MessageCircle, TriangleAlert } from "lucide-react";
 import { conversionLabels, trackLead } from "@/lib/gtag";
 import { originLine } from "@/lib/lead-origin";
@@ -33,6 +33,28 @@ const QUANTIDADES = [
   { value: "Ainda não sei", label: "Ainda não sei", abaixoDoMinimo: false },
 ] as const;
 
+/**
+ * Atalhos aceitos no parametro ?seg= da URL do anuncio. Servem para o
+ * visitante que clicou num anuncio de jaleco ja encontrar "Linha hospitalar"
+ * escolhida, sem precisar procurar na lista.
+ */
+const ATALHOS_SEGMENTO: Record<string, string> = {
+  profissionais: "Uniformes profissionais",
+  hospitalar: "Linha hospitalar",
+  escolares: "Uniformes escolares",
+  hotelaria: "Têxteis para hotelaria",
+};
+
+function segmentoInicial(): string {
+  if (typeof window === "undefined") return "";
+  try {
+    const atalho = new URLSearchParams(window.location.search).get("seg");
+    return (atalho && ATALHOS_SEGMENTO[atalho.toLowerCase()]) || "";
+  } catch {
+    return "";
+  }
+}
+
 export function QualificadorWhatsApp({
   whatsapp,
   fallbackCode = "LP-ORCAMENTO",
@@ -44,6 +66,13 @@ export function QualificadorWhatsApp({
   const [quantidade, setQuantidade] = useState<string>("");
   const [nome, setNome] = useState<string>("");
   const [erro, setErro] = useState<string | null>(null);
+
+  // Depois da montagem, de proposito: a pagina e estatica e ler a query
+  // string no primeiro render causaria divergencia de hidratacao.
+  useEffect(() => {
+    const inicial = segmentoInicial();
+    if (inicial) setSegmento((atual) => atual || inicial);
+  }, []);
 
   const origin = useLeadOrigin(fallbackCode);
   const abaixoDoMinimo =
