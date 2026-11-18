@@ -100,11 +100,12 @@ export default async function OrcamentoPage() {
               Fábrica própria · Ananindeua/PA
             </p>
             <h1 className="mt-3 text-[1.75rem] font-bold leading-[1.15] sm:text-4xl lg:mt-4 lg:text-[2.75rem]">
-              Uniformes sob medida para a sua equipe
+              Uniformes para empresas, direto da fábrica
             </h1>
             <p className="mt-3 max-w-xl text-base text-white/85 lg:mt-4 lg:text-lg">
-              Fabricação própria desde 1995, com bordado da sua logomarca.
-              Pedidos a partir de 30 peças.
+              Uniformes profissionais, corporativos e hospitalares sob medida
+              para a sua equipe. Fabricação própria desde 1995, com bordado da
+              sua logomarca. Pedidos a partir de 30 peças.
             </p>
           </div>
 
